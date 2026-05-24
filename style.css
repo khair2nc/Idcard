@@ -1,84 +1,79 @@
 body{
-    font-family: Arial;
-    background:#eef2f7;
-    padding:20px;
+    font-family: sans-serif;
+    background:#f4f6f9;
     text-align:center;
+    padding:20px;
 }
 
-h2{
-    margin-bottom:10px;
+.header{
+    background:#2c3e50;
+    color:white;
+    padding:10px;
+    border-radius:8px;
 }
 
-select, input{
+.search-box, .form{
+    margin:15px auto;
+}
+
+input, select, button{
     padding:10px;
     margin:5px;
-    width:250px;
+    width:200px;
 }
 
 button{
-    padding:10px;
-    width:270px;
-    background:#007bff;
+    background:#3498db;
     color:white;
     border:none;
     cursor:pointer;
 }
 
-#cardContainer{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:15px;
-    margin-top:20px;
-}
-
 /* CARD */
 .card{
-    width:320px;
+    width:350px;
+    margin:20px auto;
     background:white;
     border-radius:10px;
-    padding:15px;
+    overflow:hidden;
     box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+.card.teacher{
+    border-top:10px solid #2980b9;
+}
+
+.card.employee{
+    border-top:10px solid #16a085;
+}
+
+.card.student{
+    border-top:10px solid #8e44ad;
+}
+
+.card-header{
+    background:#ecf0f1;
+    padding:10px;
+}
+
+.card-body{
     text-align:left;
-    position:relative;
+    padding:10px;
 }
 
-.header{
-    background:#007bff;
-    color:white;
-    padding:8px;
-    text-align:center;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.info{
-    font-size:14px;
-    margin-top:10px;
-}
-
-.info p{
-    margin:4px 0;
-}
-
-/* SIGNATURE */
-.signature{
-    position:absolute;
-    bottom:10px;
-    right:15px;
-    text-align:center;
+.card-footer{
+    background:#f1f1f1;
+    padding:10px;
     font-size:12px;
 }
 
-.signature-line{
-    border-top:1px solid #000;
-    width:120px;
-    margin-top:25px;
+.qr{
+    margin-top:10px;
 }
 
-/* BUTTON */
-.download{
-    margin-top:10px;
-    background:green;
-    width:100%;
+.back{
+    background:#2c3e50;
+    color:white;
+    padding:10px;
+    font-size:12px;
 }
