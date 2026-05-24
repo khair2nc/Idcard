@@ -1,0 +1,210 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+body{
+    background:#f2f5ff;
+    padding:30px;
+    color:#222;
+}
+
+header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+header h1{
+    font-size:32px;
+    color:#1b2a52;
+}
+
+header p{
+    margin-top:8px;
+    color:#666;
+}
+
+.search-box{
+    width:100%;
+    max-width:500px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.input-group input,
+.input-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#1b2a52;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#314b8f;
+}
+
+.hidden{
+    display:none;
+}
+
+.cards-container{
+    display:flex;
+    gap:30px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:40px;
+}
+
+.id-card{
+    width:340px;
+    min-height:540px;
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+    position:relative;
+    overflow:hidden;
+}
+
+.front-card{
+    background:linear-gradient(135deg,#ffffff,#dce7ff);
+    border-top:8px solid #23408e;
+}
+
+.back-card{
+    background:linear-gradient(135deg,#ffffff,#e3f7ff);
+    border-top:8px solid #00a8cc;
+}
+
+.top-area{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    width:65px;
+    height:65px;
+    object-fit:cover;
+}
+
+.top-area h2{
+    font-size:18px;
+    color:#1b2a52;
+}
+
+.middle-area{
+    text-align:center;
+}
+
+.person-photo{
+    width:120px;
+    height:120px;
+    border-radius:12px;
+    object-fit:cover;
+    border:4px solid #fff;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+.person-info{
+    margin-top:20px;
+}
+
+.person-info h3{
+    font-size:24px;
+    color:#102048;
+    margin-bottom:10px;
+}
+
+.person-info p{
+    margin-bottom:8px;
+    font-size:15px;
+}
+
+.signature-area{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+    text-align:center;
+}
+
+.sign{
+    width:90px;
+}
+
+.signature-area p{
+    font-size:12px;
+}
+
+.back-card h3{
+    margin-bottom:20px;
+    color:#1b2a52;
+}
+
+.back-card p{
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+#qrcode{
+    margin:25px auto;
+    width:120px;
+}
+
+.warning{
+    margin-top:20px;
+    padding:12px;
+    background:#fff3cd;
+    border-radius:10px;
+    font-size:13px;
+}
+
+#downloadBtn{
+    margin-top:30px;
+    max-width:300px;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+@media(max-width:768px){
+
+    body{
+        padding:15px;
+    }
+
+    .id-card{
+        width:100%;
+        max-width:340px;
+    }
+
+}
