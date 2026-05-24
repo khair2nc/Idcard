@@ -296,11 +296,31 @@ button{
 
     position:absolute;
 
-    right:10px;
+    bottom:28px;
 
-    bottom:18px;
+    right:15px;
 
     text-align:center;
+
+    width:80px;
+
+}
+
+.signature img{
+
+    width:55px;
+
+}
+
+.signature p{
+
+    font-size:6px;
+
+    border-top:1px solid #000;
+
+    margin-top:2px;
+
+    padding-top:2px;
 
 }
 
