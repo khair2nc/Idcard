@@ -1,83 +1,56 @@
-let data = [];
+function generateCard(){
 
-/* ADD */
-document.getElementById("form").addEventListener("submit", function(e){
-    e.preventDefault();
+let type = document.getElementById("type").value;
+let name = document.getElementById("name").value;
+let id = document.getElementById("id").value;
+let dob = document.getElementById("dob").value;
+let cls = document.getElementById("class").value;
+let position = document.getElementById("position").value;
+let join = document.getElementById("join").value;
+let expire = document.getElementById("expire").value;
+let phone = document.getElementById("phone").value;
+let blood = document.getElementById("blood").value;
 
-    let obj = {
-        type: type.value,
-        name: name.value,
-        position: position.value,
-        index: index.value,
-        subject: subject.value,
-        join: join.value,
-        expire: expire.value,
-        phone: phone.value,
-        blood: blood.value
-    };
+let html = `
+<div class="card ${type}" id="card">
 
-    data.push(obj);
-    this.reset();
-    display(data);
+<div class="card-header">
+<h3>${name.toUpperCase()}</h3>
+<p>${position}</p>
+</div>
+
+<div class="card-body">
+<p><b>ID:</b> ${id}</p>
+<p><b>DOB:</b> ${dob}</p>
+<p><b>Class:</b> ${cls}</p>
+<p><b>Join:</b> ${join}</p>
+<p><b>Expire:</b> ${expire}</p>
+<p><b>Phone:</b> ${phone}</p>
+<p><b>Blood:</b> ${blood}</p>
+
+<div id="qrcode"></div>
+</div>
+
+<div class="card-footer">
+প্রতিষ্ঠানের সম্পত্তি - হারালে ফেরত দিন
+</div>
+
+<div class="back">
+School: নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি |
+Phone: 017XXXXXXXX
+</div>
+
+</div>
+`;
+
+document.getElementById("cardArea").innerHTML = html;
+
+// QR CODE
+document.getElementById("qrcode").innerHTML = "";
+new QRCode(document.getElementById("qrcode"), {
+    text: id + " | " + name,
+    width: 80,
+    height: 80
 });
 
-/* DISPLAY */
-function display(list){
-    let container = document.getElementById("cardContainer");
-    container.innerHTML = "";
-
-    list.forEach((item,i)=>{
-        container.innerHTML += `
-        <div class="card" id="card${i}">
-            <div class="header">
-                ${item.type.toUpperCase()} ID CARD
-            </div>
-
-            <div class="info">
-                <p><b>নাম:</b> ${item.name}</p>
-                <p><b>পদবী:</b> ${item.position}</p>
-                <p><b>আইডি:</b> ${item.index}</p>
-                <p><b>বিষয়:</b> ${item.subject}</p>
-                <p><b>যোগদান:</b> ${item.join}</p>
-                <p><b>মেয়াদ:</b> ${item.expire}</p>
-                <p><b>মোবাইল:</b> ${item.phone}</p>
-                <p><b>রক্তের গ্রুপ:</b> ${item.blood}</p>
-            </div>
-
-            <div class="signature">
-                <div class="signature-line"></div>
-                প্রতিষ্ঠান প্রধানের স্বাক্ষর
-            </div>
-
-            <button class="download" onclick="downloadCard(${i})">Download</button>
-        </div>
-        `;
-    });
 }
-
-/* SEARCH */
-document.getElementById("search").addEventListener("keyup", function(){
-    let input = this.value.toLowerCase();
-
-    let filtered = data.filter(item =>
-        item.name.toLowerCase().includes(input) ||
-        item.index.toLowerCase().includes(input)
-    );
-
-    display(filtered);
-});
-
-/* DOWNLOAD */
-function downloadCard(i){
-    let card = document.getElementById("card" + i);
-
-    html2canvas(card).then(canvas=>{
-        let a = document.createElement("a");
-        a.download = "id-card.png";
-        a.href = canvas.toDataURL();
-        a.click();
-    });
-}
-
-/* INIT */
-display(data);
