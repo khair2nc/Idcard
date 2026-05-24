@@ -119,10 +119,58 @@ button{
 
 }
 
-/* FRONT */
+/* FRONT CARD */
 
 .front-card{
+
     border:2px solid #7a0000;
+
+    position:relative;
+
+}
+
+
+/* LEFT SIDE DESIGN */
+
+.front-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:22px;
+    height:100%;
+
+    background:#7a0000;
+
+    border-top-right-radius:20px;
+    border-bottom-right-radius:20px;
+
+}
+
+
+/* RIGHT SIDE DESIGN */
+
+.front-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    right:0;
+
+    width:22px;
+    height:100%;
+
+    background:#111;
+
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+
 }
 
 /* HEADER */
