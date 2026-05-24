@@ -65,13 +65,14 @@ category.addEventListener("change", () => {
 const users = {
 
     teacher:{
-        name:"মোঃ রহমান",
+        name:"রেবা পারভিন",
         position:"সহকারী শিক্ষক",
-        index:"T-102",
-        mobile:"01700000000",
-        blood:"A+",
-        join:"01-01-2020",
-        expire:"31-12-2028"
+        subject:"সমাজ বিজ্ঞান",
+        index:"1052040",
+        mobile:"01714562626",
+        blood:"AB+",
+        join:"05-01-2005",
+        expire:"11/01/2034"
     },
 
     staff:{
@@ -114,12 +115,16 @@ searchBtn.addEventListener("click", () => {
         personType.innerText = users.teacher.position;
 
         extraInfo1.innerText = "ইনডেক্স নং: " + users.teacher.index;
+        
+        extraInfo1.innerText = "বিষয়: " + users.teacher.index;
 
         extraInfo2.innerText = "মোবাইল: " + users.teacher.mobile;
 
         extraInfo3.innerText = "রক্তের গ্রুপ: " + users.teacher.blood;
 
         extraInfo4.innerText = "যোগদান: " + users.teacher.join;
+        
+        extraInfo1.innerText = "মেয়াদ উত্তীর্ণ: " + users.teacher.index;
 
     }
 
