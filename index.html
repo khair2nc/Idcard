@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আইডি কার্ড জেনারেটর | নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</title>
+    <!-- Tailwind CSS for Responsive Design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2pdf.js for High Quality PDF Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .id-card {
+            width: 3.375in;
+            height: 2.125in;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            font-size: 8px;
+            text-transform: uppercase;
+        }
+        .bg-teacher { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .bg-student { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg">
+        <!-- Header -->
+        <div class="text-center mb-8 border-b pb-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h1>
+            <p class="text-gray-500">বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪ খ্রি:</p>
+            <span class="mt-2 inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">ID Card Generation Portal</span>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 bg-gray-50 p-4 rounded-lg border">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">ধরণ নির্বাচন করুন</label>
+                <select id="typeSelect" class="w-full border rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="">-- নির্বাচন করুন --</option>
+                    <option value="teacher">শিক্ষক</option>
+                    <option value="staff">কর্মচারী</option>
+                    <option value="student">স্টুডেন্ট</option>
+                </select>
+            </div>
+
+            <!-- Dependent Input 1 -->
+            <div>
+                <label id="input1Label" class="block text-sm font-medium text-gray-700 mb-1">ইনডেক্স নং / শ্রেণি</label>
+                <input type="text" id="input1" disabled class="w-full border rounded-lg p-2 bg-gray-100 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="প্রথমে ধরণ বাছুন">
+            </div>
+
+            <!-- Dependent Input 2 -->
+            <div>
+                <label id="input2Label" class="block text-sm font-medium text-gray-700 mb-1">জন্মতারিখ / রোল নং</label>
+                <input type="text" id="input2" disabled class="w-full border rounded-lg p-2 bg-gray-100 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="প্রথমে ধরণ বাছুন">
+            </div>
+
+            <div class="flex items-end">
+                <button id="searchBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition dynamic shadow-md">
+                    কার্ড খুঁজুন
+                </button>
+            </div>
+        </div>
+
+        <!-- Display & Download Area -->
+        <div id="resultArea" class="hidden">
+            <div class="flex flex-col items-center justify-center border-t pt-6">
+                <div class="flex flex-wrap gap-6 justify-center mb-6" id="cardContainer">
+                    
+                    <!-- FRONT SIDE -->
+                    <div id="idCardFront" class="id-card border rounded-xl shadow-md bg-white flex flex-col justify-between p-2 text-gray-800">
+                        <!-- Card Header -->
+                        <div class="flex items-center border-b pb-1 gap-1">
+                            <div class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center font-bold text-[6px] text-center border">LOGO</div>
+                            <div class="flex-1">
+                                <h2 class="font-bold text-[9px] leading-tight text-blue-900" id="cardSchoolName">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
+                                <p class="text-[6px] text-gray-500 leading-none">বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪</p>
+                            </div>
+                            <div id="cardBadge" class="text-[5px] text-white px-1 py-0.5 rounded font-bold bg-teacher">TEACHER</div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="flex gap-2 my-auto items-center">
+                            <div class="w-14 h-16 bg-gray-100 border rounded flex items-center justify-center text-gray-400 text-[6px] overflow-hidden">
+                                <span id="photoPlaceholder">ছবি</span>
+                            </div>
+                            <div class="flex-1 text-[7px] space-y-0.5 text-gray-700">
+                                <div class="font-bold text-[10px] text-gray-900" id="cardName">MD. KHAIRUL SHEIKH</div>
+                                <div id="dynamicFields" class="space-y-0.5">
+                                    <!-- Dynamic Rows Inserted Here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="flex justify-between items-end border-t pt-1">
+                            <div class="text-[6px]">
+                                <span class="font-bold text-red-600">রক্তের গ্রুপ:</span> <span id="cardBlood">O+</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-12 border-b border-gray-400 mx-auto text-[5px] text-gray-400">Sign</div>
+                                <div class="text-[5px] font-bold text-gray-600">প্রধান শিক্ষক</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACK SIDE -->
+                    <div id="idCardBack" class="id-card border rounded-xl shadow-md bg-white flex flex-col justify-between p-2 text-gray-800">
+                        <div class="text-center border-b pb-1">
+                            <p class="font-bold text-[7px]">যদি কার্ডটি খুঁজে পান তবে নিচের ঠিকানায় ফেরত দিন:</p>
+                        </div>
+                        
+                        <div class="text-center my-auto space-y-1">
+                            <p class="font-semibold text-[7px] text-blue-900">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</p>
+                            <p class="text-[6px]">বোয়ালমারী, ফরিদপুর।</p>
+                            <p class="text-[6px] text-gray-500">ওয়েবসাইট: www.npda.edu.bd</p>
+                            <p class="text-[6px] font-bold text-red-600">জরুরি যোগাযোগ: +৮৮০১৭১০০০০০০০</p>
+                        </div>
+
+                        <div class="flex justify-between items-center border-t pt-1">
+                            <div class="text-[6px] text-gray-500 max-w-[65%] leading-tight">
+                                * এই কার্ডটি বিদ্যালয়ের সম্পত্তি। অপব্যবহার দণ্ডনীয় অপরাধ।
+                            </div>
+                            <!-- Mock QR Code Placeholder -->
+                            <div class="w-8 h-8 bg-gray-800 flex items-center justify-center text-white text-[4px] p-0.5 rounded">
+                                [ QR CODE ]
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-md flex items-center gap-2">
+                    svg ডাউনলোড করুন (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Handling Dependency and Mock Data -->
+    <script>
+        // Mock Database for Demo
+        const database = {
+            teacher: {
+                "101": { name: "MD. KHAIRUL SHEIKH", dob: "15-08-1990", index: "T-101", role: "সহকারী শিক্ষক", join: "01-01-2015", expiry: "31-12-2030", mobile: "01712345678", blood: "A+" },
+                "102": { name: "ABDUR RAHMAN", dob: "10-05-1988", index: "T-102", role: "প্রধান শিক্ষক", join: "12-04-2010", expiry: "31-12-2035", mobile: "01711112223", blood: "O+" }
+            },
+            staff: {
+                "201": { name: "KAMAL HOSSAIN", dob: "20-02-1992", index: "S-201", role: "অফিস সহকারী", join: "10-02-2018", expiry: "31-12-2028", mobile: "01912345678", blood: "B+" }
+            },
+            student: {
+                "10": {
+                    "1": { name: "NUR MOHAMMAD", class: "দশম", roll: "১", session: "২০২৬", blood: "AB+" }
+                },
+                "9": {
+                    "5": { name: "FATIMA ANJUM", class: "নবম", roll: "৫", session: "২০২৬", blood: "O-" }
+                }
+            }
+        };
+
+        const typeSelect = document.getElementById('typeSelect');
+        const input1 = document.getElementById('input1');
+        const input2 = document.getElementById('input2');
+        const input1Label = document.getElementById('input1Label');
+        const input2Label = document.getElementById('input2Label');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultArea = document.getElementById('resultArea');
+
+        // Handle Dropdown Changes (Dependent Fields)
+        typeSelect.addEventListener('change', function() {
+            const type = this.value;
+            input1.value = '';
+            input2.value = '';
+            
+            if (!type) {
+                input1.disabled = true;
+                input2.disabled = true;
+                input1.placeholder = "প্রথমে ধরণ বাছুন";
+                input2.placeholder = "প্রথমে ধরণ বাছুন";
+                return;
+            }
+
+            input1.disabled = false;
+            input2.disabled = false;
+
+            if (type === 'teacher' || type === 'staff') {
+                input1Label.innerText = "ইনডেক্স নং";
+                input2Label.innerText = "জন্মতারিখ (DD-MM-YYYY)";
+                input1.placeholder = "e.g., 101";
+                input2.placeholder = "e.g., 15-08-1990";
+            } else if (type === 'student') {
+                input1Label.innerText = "শ্রেণি (শুধু সংখ্যা)";
+                input2Label.innerText = "রোল নং";
+                input1.placeholder = "e.g., 10 অথবা 9";
+                input2.placeholder = "e.g., 1";
+            }
+        });
+
+        // Search Action
+        searchBtn.addEventListener('click', function() {
+            const type = typeSelect.value;
+            const val1 = input1.value.trim();
+            const val2 = input2.value.trim();
+
+            if (!type || !val1 || !val2) {
+                alert("দয়া করে সবকটি ঘর সঠিকভাবে পূরণ করুন।");
+                return;
+            }
+
+            let data = null;
+
+            if (type === 'teacher' || type === 'staff') {
+                if (database[type][val1] && database[type][val1].dob === val2) {
+                    data = database[type][val1];
+                }
+            } else if (type === 'student') {
+                if (database.student[val1] && database.student[val1][val2]) {
+                    data = database.student[val1][val2];
+                }
+            }
+
+            if (data) {
+                renderCard(type, data);
+                resultArea.classList.remove('hidden');
+            } else {
+                alert("দুঃখিত! এই তথ্য দিয়ে কোনো আইডি কার্ড খুঁজে পাওয়া যায়নি। (ডেমো ডাটার জন্য টিচার ১০১ এবং পাসওয়ার্ড ১৫-০৮-১৯৯০ ব্যবহার করুন)");
+                resultArea.classList.add('hidden');
+            }
+        });
+
+        // Render Card Data onto Layout
+        function renderCard(type, data) {
+            const badge = document.getElementById('cardBadge');
+            const nameEl = document.getElementById('cardName');
+            const dynamicFields = document.getElementById('dynamicFields');
+            const bloodEl = document.getElementById('cardBlood');
+
+            // Set Common Info
+            nameEl.innerText = data.name;
+            bloodEl.innerText = data.blood || 'N/A';
+            dynamicFields.innerHTML = '';
+
+            // Layout Variation based on Types
+            if (type === 'teacher' || type === 'staff') {
+                badge.innerText = type === 'teacher' ? 'TEACHER' : 'STAFF';
+                badge.className = "text-[5px] text-white px-1 py-0.5 rounded font-bold bg-teacher";
+                
+                dynamicFields.innerHTML = `
+                    <div><strong>পদবী:</strong> ${data.role}</div>
+                    <div><strong>ইনডেক্স নং:</strong> ${data.index}</div>
+                    <div><strong>যোগদান:</strong> ${data.join}</div>
+                    <div><strong>মেয়াদ উত্তীর্ণ:</strong> ${data.expiry}</div>
+                    <div><strong>মোবাইল:</strong> ${data.mobile}</div>
+                `;
+            } else {
+                badge.innerText = 'STUDENT';
+                badge.className = "text-[5px] text-white px-1 py-0.5 rounded font-bold bg-student";
+
+                dynamicFields.innerHTML = `
+                    <div><strong>শ্রেণি:</strong> ${data.class}</div>
+                    <div><strong>রোল নং:</strong> ${data.roll}</div>
+                    <div><strong>শিক্ষাবর্ষ:</strong> ${data.session}</div>
+                `;
+            }
+        }
+
+        // PDF Generation and Download Logic
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const element = document.getElementById('cardContainer');
+            const opt = {
+                margin:       10,
+                filename:     'id_card_download.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 3, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
+    </script>
+</body>
+</html>
