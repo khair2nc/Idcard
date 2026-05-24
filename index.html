@@ -1,200 +1,47 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>NPCD Academy ID Card</title>
-
-    <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- QR CODE -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+<meta charset="UTF-8">
+<title>ID Card Generator System</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+<h2>📇 ID Card Generator System</h2>
 
-        <h1>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h1>
-
-        <p>ID Card Generator System</p>
-
-    </header>
-
-    <!-- SEARCH -->
-
-    <section class="search-box">
-
-        <div class="input-group">
-
-            <label>ক্যাটাগরি নির্বাচন করুন</label>
-
-            <select id="category">
-
-    <option value="">-- নির্বাচন করুন --</option>
-
-    <option value="teacher">শিক্ষক</option>
-
-    <option value="staff">কর্মচারী</option>
-
-    <option value="student">স্টুডেন্ট</option>
-
+<!-- TYPE SELECT -->
+<select id="type">
+    <option value="student">Student ID</option>
+    <option value="teacher">Teacher ID</option>
 </select>
 
-        </div>
+<!-- SEARCH -->
+<input type="text" id="search" placeholder="🔎 Search Name / ID">
 
-        <div id="dynamicFields"></div>
+<div class="container">
 
-        <button id="searchBtn">সার্চ করুন</button>
+<!-- FORM -->
+<form id="form">
 
-    </section>
+    <input type="text" id="name" placeholder="নাম" required>
+    <input type="text" id="position" placeholder="পদবী" required>
+    <input type="text" id="index" placeholder="ইনডেক্স / আইডি" required>
+    <input type="text" id="subject" placeholder="বিষয়">
+    <input type="text" id="join" placeholder="যোগদান তারিখ">
+    <input type="text" id="expire" placeholder="মেয়াদ">
+    <input type="text" id="phone" placeholder="মোবাইল">
+    <input type="text" id="blood" placeholder="রক্তের গ্রুপ">
 
-    <!-- CARD -->
+    <button type="submit">Generate ID</button>
+</form>
 
-    <section id="cardSection" class="hidden">
+</div>
 
-        <div class="cards-container">
+<div id="cardContainer"></div>
 
-            <!-- FRONT -->
-
-            <div class="id-card front-card" id="frontCard">
-
-                <div class="top-header">
-
-                    <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
-
-                    <p>বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪</p>
-
-                </div>
-
-                <div class="logo-area">
-
-                    <img src="assets/logo.png" class="logo">
-
-                </div>
-
-                <div class="photo-area">
-
-                    <img src="assets/sample-photo.jpg"
-                    id="personPhoto"
-                    class="person-photo">
-
-                </div>
-
-                <div class="name-box">
-
-                    <h3 id="personName">নাম</h3>
-
-                </div>
-
-                <div class="info-area">
-
-                    <div class="info-item">
-                        <span>পদবী</span>
-                        <span id="personType"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>ইনডেক্স</span>
-                        <span id="extraInfo1"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>বিষয়</span>
-                        <span id="extraInfo2"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>যোগদান</span>
-                        <span id="extraInfo3"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>মেয়াদ</span>
-                        <span id="extraInfo4"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>মোবাইল</span>
-                        <span id="extraInfo5"></span>
-                    </div>
-
-                    <div class="info-item">
-                        <span>রক্ত</span>
-                        <span id="extraInfo6"></span>
-                    </div>
-
-                </div>
-
-                <div class="signature">
-
-                    <img src="assets/principal-sign.png">
-
-                    <p>প্রতিষ্ঠান প্রধান</p>
-
-                </div>
-
-                <div class="bottom-bar">
-
-                    OFFICIAL ID CARD
-
-                </div>
-
-            </div>
-
-            <!-- BACK -->
-
-            <div class="id-card back-card" id="backCard">
-
-                <div class="back-content">
-
-                    <h3>যোগাযোগ</h3>
-
-                    <p>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</p>
-
-                    <p>বোয়ালমারী, ফরিদপুর</p>
-
-                    <p>মোবাইল: 01700000000</p>
-
-                    <p>ওয়েবসাইট: www.npcdacademy.edu.bd</p>
-
-                    <div id="qrcode"></div>
-
-                    <div class="warning-box">
-
-                        কার্ডটি হারিয়ে গেলে অবিলম্বে
-                        স্কুল কর্তৃপক্ষকে জানান।
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <button id="downloadBtn">PDF Download</button>
-
-    </section>
-
-    <!-- JS -->
-
-    <script src="script.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
