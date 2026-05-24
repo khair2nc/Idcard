@@ -2,46 +2,58 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<title>ID Card Generator System</title>
+<title>School ID Card Generator</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
 <body>
 
-<h2>📇 ID Card Generator System</h2>
-
-<!-- TYPE SELECT -->
-<select id="type">
-    <option value="student">Student ID</option>
-    <option value="teacher">Teacher ID</option>
-</select>
+<div class="header">
+    <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
+    <p>বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪ খ্রি:</p>
+</div>
 
 <!-- SEARCH -->
-<input type="text" id="search" placeholder="🔎 Search Name / ID">
+<div class="search-box">
 
-<div class="container">
+<select id="type" onchange="updateFields()">
+    <option value="">Select Type</option>
+    <option value="teacher">Teacher</option>
+    <option value="employee">Employee</option>
+    <option value="student">Student</option>
+</select>
 
-<!-- FORM -->
-<form id="form">
+<select id="searchBy">
+    <option value="index">ইনডেক্স নং</option>
+    <option value="dob">জন্মতারিখ</option>
+    <option value="class">শ্রেণি</option>
+    <option value="roll">রোল</option>
+</select>
 
-    <input type="text" id="name" placeholder="নাম" required>
-    <input type="text" id="position" placeholder="পদবী" required>
-    <input type="text" id="index" placeholder="ইনডেক্স / আইডি" required>
-    <input type="text" id="subject" placeholder="বিষয়">
-    <input type="text" id="join" placeholder="যোগদান তারিখ">
-    <input type="text" id="expire" placeholder="মেয়াদ">
-    <input type="text" id="phone" placeholder="মোবাইল">
-    <input type="text" id="blood" placeholder="রক্তের গ্রুপ">
+<input type="text" id="searchValue" placeholder="Search value">
 
-    <button type="submit">Generate ID</button>
-</form>
+<button onclick="searchCard()">Search</button>
 
 </div>
 
-<div id="cardContainer"></div>
+<!-- FORM -->
+<div class="form">
+    <input type="text" id="name" placeholder="নাম">
+    <input type="text" id="id" placeholder="ইনডেক্স / রোল">
+    <input type="text" id="dob" placeholder="জন্মতারিখ">
+    <input type="text" id="class" placeholder="শ্রেণি">
+    <input type="text" id="position" placeholder="পদবী">
+    <input type="text" id="join" placeholder="যোগদান">
+    <input type="text" id="expire" placeholder="মেয়াদ">
+    <input type="text" id="phone" placeholder="মোবাইল">
+    <input type="text" id="blood" placeholder="রক্তের গ্রুপ">
+    <button onclick="generateCard()">Generate</button>
+</div>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<!-- CARD -->
+<div id="cardArea"></div>
+
 <script src="script.js"></script>
-
 </body>
 </html>
