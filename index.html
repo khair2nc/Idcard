@@ -1,370 +1,138 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আইডি কার্ড জেনারেটর | নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>NPCD Academy ID Card Generator</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Hind Siliguri', sans-serif; background-color: #f3f4f6; }
-        
-        /* 2.125 x 3.375 Inch Exact Ratio Layout at High Resolution Rendering */
-        .id-card-wrapper {
-            width: 324px;   /* 3.375 inches approx in optimized render pixels */
-            height: 514px;  /* 2.125 inches approx in optimized render pixels */
-            background: white;
-            border-radius: 14px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            border: 1px solid #bbb;
-            display: inline-block;
-            box-sizing: border-box;
-            letter-spacing: 0.2px;
-        }
-
-        /* Top Curved Header mimicking sample 1 & 3 */
-        .card-header {
-            background-color: #710000;
-            color: white;
-            text-align: center;
-            padding: 16px 12px 10px;
-            height: 120px;
-            position: relative;
-            border-bottom: 4px solid #d4af37;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            box-sizing: border-box;
-        }
-
-        .card-header h2 { font-size: 15px; font-weight: 700; line-height: 1.3; color: #fff; }
-        .card-header p { font-size: 9px; color: #e5e7eb; margin-top: 2px; }
-
-        /* Floating Circular Logo */
-        .logo-box {
-            width: 68px;
-            height: 68px;
-            background: white;
-            border-radius: 50%;
-            margin: -34px auto 0;
-            position: relative;
-            z-index: 20;
-            padding: 2px;
-            border: 2px solid #d4af37;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
-            box-sizing: border-box;
-        }
-
-        /* User Picture Display Area */
-        .photo-box {
-            width: 96px;
-            height: 112px;
-            margin: 12px auto 6px;
-            border: 2px solid #710000;
-            background: #f3f4f6;
-            overflow: hidden;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        /* Safe Pill-shaped Name Container */
-        .name-banner-container {
-            text-align: center;
-            margin: 4px 0 2px;
-            padding: 0 12px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .name-banner {
-            background-color: #710000;
-            color: white;
-            padding: 4px 18px;
-            border-radius: 9999px; /* Solid unbendable capsule capsule */
-            display: inline-block;
-            font-weight: 700;
-            font-size: 14px;
-            line-height: 1.3;
-            max-width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Protected Dynamic Text Grid */
-        .info-table-container {
-            padding: 0 24px; 
-            margin-top: 6px;
-            box-sizing: border-box;
-            width: 100%;
-        }
-        .info-table { font-size: 12px; width: 100%; border-collapse: collapse; }
-        .info-table td { padding: 2.5px 0; vertical-align: top; color: #111; line-height: 1.2; }
-        .label { font-weight: 600; color: #444; width: 80px; text-align: left; }
-
-        /* Standardized Absolute Signature Space */
-        .signature-area {
-            position: absolute;
-            bottom: 24px;
-            right: 20px;
-            text-align: center;
-            font-size: 9px;
-            z-index: 30;
-            width: 100px;
-        }
-
-        /* Safe bottom curve block matching image 1 & 3 layout */
-        .front-footer-wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 18px;
-            background-color: #710000;
-            border-top: 3px solid #d4af37;
-            z-index: 10;
-        }
-
-        /* Back Page Style Blocks */
-        .back-side { background-color: white; padding: 16px; text-align: center; box-sizing: border-box; height: 100%; position: relative; }
-        .back-header {
-            background: #710000;
-            color: white;
-            padding: 7px;
-            font-size: 13px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            border-bottom: 3px solid #d4af37;
-        }
-
-        .terms { font-size: 10.5px; color: #222; margin: 20px 8px; line-height: 1.45; text-align: justify; }
-        
-        .footer-back {
-            background: #710000;
-            color: white;
-            font-size: 9px;
-            padding: 8px 6px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            border-top: 3px solid #d4af37;
-            box-sizing: border-box;
-        }
-    </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md border-t-4 border-red-900">
-        <div class="text-center mb-6">
-            <h1 class="text-xl font-bold text-red-900">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h1>
-            <p class="text-sm text-gray-600">বোয়ালমারী, ফরিদপুর | আইডি কার্ড পোর্টাল</p>
+    <!-- Header -->
+    <header>
+        <h1>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h1>
+        <p>আইডি কার্ড জেনারেটর সিস্টেম</p>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-box">
+
+        <div class="input-group">
+            <label>ক্যাটাগরি নির্বাচন করুন</label>
+
+            <select id="category">
+                <option value="">-- নির্বাচন করুন --</option>
+                <option value="teacher">শিক্ষক</option>
+                <option value="staff">কর্মচারী</option>
+                <option value="student">স্টুডেন্ট</option>
+            </select>
         </div>
 
-        <div class="space-y-4 bg-gray-50 p-4 rounded-lg border mb-6">
-            <div class="grid grid-cols-1 gap-4">
-                <select id="typeSelect" class="border p-2 rounded w-full bg-white outline-none focus:border-red-800">
-                    <option value="">কার্ডের ধরন নির্বাচন করুন</option>
-                    <option value="teacher">১. শিক্ষক</option>
-                    <option value="staff">২. কর্মচারী</option>
-                    <option value="student">৩. স্টুডেন্ট</option>
-                </select>
-                
-                <div id="dynamicInputs" class="grid grid-cols-2 gap-2 hidden">
-                    <input type="text" id="input1" class="border p-2 rounded bg-white outline-none" placeholder="">
-                    <input type="text" id="input2" class="border p-2 rounded bg-white outline-none" placeholder="">
-                </div>
+        <div id="dynamicFields"></div>
 
-                <button onclick="generateCard()" class="bg-red-800 text-white font-bold p-2 rounded hover:bg-red-900 transition w-full shadow">
-                    আইডি কার্ড খুঁজুন
-                </button>
-            </div>
-        </div>
+        <button id="searchBtn">সার্চ করুন</button>
 
-        <div id="printArea" class="hidden flex flex-col items-center">
-            <div id="captureArea" class="p-4 bg-gray-300 rounded-lg border mb-6 flex flex-wrap justify-center gap-6" style="width: fit-content;">
-                
-                <div class="id-card-wrapper" id="frontCard">
-                    <div class="card-header">
+    </section>
+
+    <!-- Card Preview -->
+    <section id="cardSection" class="hidden">
+
+        <div class="cards-container">
+
+            <!-- Front Card -->
+            <div class="id-card front-card" id="frontCard">
+
+                <div class="top-area">
+
+                    <img src="assets/logo.png" class="logo">
+
+                    <div>
                         <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
-                        <p>বোয়ালমারী, ফরিদপুর। স্থাপিত: ১৯৯৪ খ্রি:</p>
-                    </div>
-                    <div class="logo-box">
-                        <img src="https://i.ibb.co.com/RpYW48KD/nc-logo-removebg-preview.png" alt="nc logo removebg preview" border="0"></a>
-                    </div>
-                    <div class="photo-box">
-                        <img src="https://i.ibb.co.com/hJTg87Mg/Reba-Parvin.jpg" alt="Reba Parvin" border="0">
-                    </div>
-                    
-                    <div class="name-banner-container">
-                        <div class="name-banner" id="resName"> রেবা পারভিন </div>
-                    </div>
-                    <p class="text-[11px] font-semibold text-gray-500 text-center mb-1" id="resTitle">সহকারী শিক্ষক</p>
-                    
-                    <div class="info-table-container">
-                        <table class="info-table">
-                            <tbody id="resTable"></tbody>
-                        </table>
+                        <p>বোয়ালমারী, ফরিদপুর</p>
+                        <small>স্থাপিত: ১৯৯৪ খ্রি:</small>
                     </div>
 
-                    <div class="signature-area">
-                        <div class="w-20 mx-auto text-sm text-blue-800 font-serif italic tracking-wide" style="line-height:0.4;">Motiur</div>
-                        <div class="border-b border-gray-400 w-20 mx-auto mt-2"></div>
-                        <p class="mt-1 font-bold text-gray-600">পরিচালকের স্বাক্ষর</p>
-                    </div>
-                    <div class="front-footer-wave"></div>
                 </div>
 
-                <div class="id-card-wrapper" id="backCard">
-                    <div class="back-side">
-                        <div class="back-header">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</div>
-                        <div class="terms">
-                            <p class="font-bold text-center text-gray-700 mb-2">বিশেষ বার্তা / শর্তাবলী</p>
-                            <p>এই কার্ডটি প্রতিষ্ঠানের নিজস্ব পরিচিতি। ব্যবহারকারী ব্যতীত অন্য কোথাও পাওয়া গেলে অনুগ্রহ করে প্রতিষ্ঠানের ঠিকানায় বা কার্যালয়ে পৌঁছে দেওয়ার জন্য বিশেষ অনুরোধ করা হলো।</p>
-                        </div>
-                        <div class="mt-8 flex justify-center">
-                            <div class="p-1 border border-gray-400 rounded bg-white">
-                                <svg width="70" height="70" viewBox="0 0 100 100">
-                                    <rect width="100" height="100" fill="white"/>
-                                    <rect x="5" y="5" width="30" height="30" fill="#111"/>
-                                    <rect x="10" y="10" width="20" height="20" fill="white"/>
-                                    <rect x="14" y="14" width="12" height="12" fill="#111"/>
-                                    <rect x="65" y="5" width="30" height="30" fill="#111"/>
-                                    <rect x="70" y="10" width="20" height="20" fill="white"/>
-                                    <rect x="74" y="14" width="12" height="12" fill="#111"/>
-                                    <rect x="5" y="65" width="30" height="30" fill="#111"/>
-                                    <rect x="10" y="70" width="20" height="20" fill="white"/>
-                                    <rect x="14" y="74" width="12" height="12" fill="#111"/>
-                                    <rect x="45" y="45" width="15" height="15" fill="#111"/>
-                                    <rect x="75" y="75" width="15" height="15" fill="#111"/>
-                                    <rect x="50" y="20" width="8" height="8" fill="#111"/>
-                                    <rect x="20" y="50" width="8" height="8" fill="#111"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="footer-back">
-                            <p class="font-bold">বোয়ালমারী, ফরিদপুর।</p>
-                            <p>মোবাইল: ০১৭১৫-৭৭৭৪৫১, ০১৭১১-৩৭৮৩৫৩</p>
-                            <p>ওয়েবসাইট: www.npda.edu.bd</p>
-                        </div>
+                <div class="middle-area">
+
+                    <img src="assets/sample-photo.jpg" id="personPhoto" class="person-photo">
+
+                    <div class="person-info">
+
+                        <h3 id="personName">নাম</h3>
+
+                        <p id="personType">পদবী</p>
+
+                        <p id="extraInfo1"></p>
+                        <p id="extraInfo2"></p>
+                        <p id="extraInfo3"></p>
+                        <p id="extraInfo4"></p>
+
                     </div>
+
+                </div>
+
+                <div class="signature-area">
+
+                    <img src="assets/principal-sign.png" class="sign">
+
+                    <p>প্রতিষ্ঠান প্রধান</p>
+
                 </div>
 
             </div>
 
-            <button onclick="downloadPDF()" class="bg-green-700 text-white px-10 py-3 rounded-full font-bold shadow-lg hover:bg-green-800 transition flex items-center gap-2">
-                <span>ডাউনলোড করুন (PDF)</span>
-            </button>
+            <!-- Back Card -->
+            <div class="id-card back-card" id="backCard">
+
+                <h3>যোগাযোগ</h3>
+
+                <p>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</p>
+
+                <p>বোয়ালমারী, ফরিদপুর</p>
+
+                <p>মোবাইল: 01700000000</p>
+
+                <p>ওয়েবসাইট: www.npcdacademy.edu.bd</p>
+
+                <div id="qrcode"></div>
+
+                <div class="warning">
+
+                    <p>
+                        কার্ডটি হারিয়ে গেলে অবিলম্বে
+                        স্কুল কর্তৃপক্ষকে জানান।
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
-    </div>
 
-    <script>
-        const db = {
-            teacher: { "101": { name: "রেবা পারভিন", index: "১০৫২০৪০", title: "সহকারী শিক্ষক", subject: "সমাজ বিজ্ঞান", join: "০৫/০১/২০০৫", mobile: "০১৭১৪-৫৬২৬২৬", blood: "AB+" } },
-            staff: { "201": { name: "মোঃ করিম মিয়া", index: "৩০৫", title: "অফিস সহকারী", father: "মোঃ রহিম মিয়া", dob: "১০/০৫/১৯塑造", mobile: "০১৯১১-০০০০০০", blood: "O+" } },
-            student: { "10": { "1": { name: "আব্দুল্লাহ আল মামুন", title: "ছাত্র", class: "দশম", roll: "১", session: "২০২৬", father: "মোঃ কাসেম", blood: "A+" } } }
-        };
+        <button id="downloadBtn">PDF Download</button>
 
-        const typeSelect = document.getElementById('typeSelect');
-        const dynamicInputs = document.getElementById('dynamicInputs');
-        const in1 = document.getElementById('input1');
-        const in2 = document.getElementById('input2');
+    </section>
 
-        typeSelect.addEventListener('change', function() {
-            dynamicInputs.classList.remove('hidden');
-            if(this.value === 'student') {
-                in1.placeholder = "শ্রেণি (সংখ্যা)";
-                in2.placeholder = "রোল নং";
-            } else {
-                in1.placeholder = "ইনডেক্স নং";
-                in2.placeholder = "জন্মতারিখ";
-            }
-        });
+    <!-- JS -->
+    <script src="script.js"></script>
 
-        function generateCard() {
-            const type = typeSelect.value;
-            const v1 = in1.value.trim();
-            const v2 = in2.value.trim();
-            let data = null;
-
-            if(type === 'student') {
-                data = db.student[v1] ? db.student[v1][v2] : null;
-            } else {
-                data = db[type] ? db[type][v1] : null;
-            }
-
-            if(data) {
-                document.getElementById('resName').innerText = data.name;
-                document.getElementById('resTitle').innerText = data.title;
-                
-                let rows = '';
-                if(type === 'student') {
-                    rows = `
-                        <tr><td class="label">শ্রেণি</td><td>: ${data.class}</td></tr>
-                        <tr><td class="label">রোল নং</td><td>: ${data.roll}</td></tr>
-                        <tr><td class="label">শিক্ষাবর্ষ</td><td>: ${data.session}</td></tr>
-                        <tr><td class="label">পিতার নাম</td><td>: ${data.father}</td></tr>
-                        <tr><td class="label">রক্তের গ্রুপ</td><td>: ${data.blood}</td></tr>`;
-                } else {
-                    rows = `
-                        <tr><td class="label">ইনডেক্স নং</td><td>: ${data.index}</td></tr>
-                        <tr><td class="label">পদবী</td><td>: ${data.title}</td></tr>
-                        <tr><td class="label">পিতার নাম</td><td>: ${data.father}</td></tr>
-                        <tr><td class="label">জন্ম তারিখ</td><td>: ${data.dob}</td></tr>
-                        <tr><td class="label">মোবাইল</td><td>: ${data.mobile}</td></tr>
-                        <tr><td class="label">রক্তের গ্রুপ</td><td>: ${data.blood}</td></tr>`;
-                }
-                document.getElementById('resTable').innerHTML = rows;
-                document.getElementById('printArea').classList.remove('hidden');
-            } else {
-                alert("দুঃখিত, তথ্য পাওয়া যায়নি! (শিক্ষক সিলেক্ট করে ইনডেক্স নং এ ১০১ লিখে খুঁজুন)");
-            }
-        }
-
-        // Anti-Distortion High Quality PDF Renderer
-        async function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            
-            // Standard A4 page layout configuration
-            const doc = new jsPDF('p', 'mm', 'a4');
-            
-            const frontCard = document.getElementById('frontCard');
-            const backCard = document.getElementById('backCard');
-            
-            // Render options safeguarding pixel positions and prevent CSS flow break
-            const renderOptions = {
-                scale: 4, // Higher scale prevents blurry texts and capsule shape breaking
-                useCORS: true,
-                allowTaint: false,
-                logging: false,
-                windowWidth: 324,
-                windowHeight: 514
-            };
-            
-            // Generate exact snapshot of Front Card
-            const canvasFront = await html2canvas(frontCard, renderOptions);
-            const imgDataFront = canvasFront.toDataURL('image/jpeg', 1.0);
-            
-            // Generate exact snapshot of Back Card
-            const canvasBack = await html2canvas(backCard, renderOptions);
-            const imgDataBack = canvasBack.toDataURL('image/jpeg', 1.0);
-            
-            // Standard CR-80 ID Card dimensions converted perfectly to millimeters (54mm x 85.7mm)
-            const cardWidthMM = 54;
-            const cardHeightMM = 85.7;
-            
-            // Place Front Card on A4 Sheet
-            doc.addImage(imgDataFront, 'JPEG', 35, 40, cardWidthMM, cardHeightMM); 
-            
-            // Place Back Card side-by-side on A4 Sheet
-            doc.addImage(imgDataBack, 'JPEG', 115, 40, cardWidthMM, cardHeightMM);
-            
-            // Download Final Document safely without shifting any elements
-            doc.save('NPDA_Official_Fixed_ID.pdf');
-        }
-    </script>
 </body>
 </html>
