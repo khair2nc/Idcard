@@ -11,83 +11,111 @@
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; background-color: #f3f4f6; }
         
-        /* ID Card Dimensions (Standard Vertical) */
+        /* Standard Vertical ID Card Setup */
         .card-container {
-            width: 280px;
-            height: 440px;
+            width: 290px;
+            height: 450px;
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             display: inline-block;
         }
 
-        /* Header Style */
+        /* Maroon Curve Header */
         .card-header {
-            background-color: #710000; /* Maroon */
+            background-color: #710000;
             color: white;
             text-align: center;
-            padding: 12px 5px;
-            height: 110px;
+            padding: 14px 10px;
+            height: 115px;
             position: relative;
-            border-bottom: 5px solid #d4af37; /* Gold Line */
+            border-bottom: 4px solid #d4af37;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
-        .card-header h2 { font-size: 15px; font-weight: 700; line-height: 1.2; }
-        .card-header p { font-size: 8px; margin-top: 2px; }
+        .card-header h2 { font-size: 14px; font-weight: 700; line-height: 1.3; color: #fff; }
+        .card-header p { font-size: 8px; color: #f3f4f6; margin-top: 1px; }
 
+        /* School Logo Frame */
         .logo-box {
-            width: 55px;
-            height: 55px;
+            width: 65px;
+            height: 65px;
             background: white;
             border-radius: 50%;
-            margin: -30px auto 0;
+            margin: -35px auto 0;
             position: relative;
             z-index: 10;
             padding: 2px;
             border: 2px solid #d4af37;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* Employee/Student Photo Frame */
         .photo-box {
-            width: 95px;
+            width: 90px;
             height: 105px;
-            margin: 10px auto;
+            margin: 10px auto 6px;
             border: 2px solid #710000;
-            background: #eee;
+            background: #f3f4f6;
             overflow: hidden;
+            border-radius: 4px;
         }
 
+        /* Fixed Capsule Shape Name Banner */
+        .name-banner-wrapper {
+            text-center: center;
+            margin-bottom: 4px;
+            padding: 0 10px;
+        }
         .name-banner {
             background-color: #710000;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 3px 16px;
+            border-radius: 50px; /* Perfect oval capsule shape */
             display: inline-block;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 13px;
-            margin-bottom: 3px;
+            line-height: 1.4;
+            max-width: 90%;
+            word-wrap: break-word;
         }
 
-        .info-table { font-size: 11px; width: 100%; padding: 0 15px; text-align: left; }
-        .info-table td { padding: 1.5px 0; vertical-align: top; }
-        .label { font-weight: bold; color: #444; width: 75px; }
+        /* Fixed Padding and Margins for Information Content */
+        .info-table-container {
+            padding: 0 20px; /* Moves text safely away from the left border */
+            margin-top: 4px;
+        }
+        .info-table { font-size: 11px; width: 100%; text-align: left; }
+        .info-table td { padding: 2px 0; vertical-align: top; color: #222; }
+        .label { font-weight: 600; color: #444; width: 75px; text-align: left; }
 
+        /* Signature Placement */
         .signature-area {
             position: absolute;
-            bottom: 12px;
-            right: 15px;
+            bottom: 22px;
+            right: 20px;
             text-align: center;
             font-size: 9px;
+            z-index: 10;
         }
 
-        .back-side {
-            background-color: white;
-            padding: 15px;
-            text-align: center;
+        /* Front Bottom Matching Header Color Wave */
+        .front-footer-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-color: #710000;
+            border-top: 3px solid #d4af37;
         }
 
+        /* Back Card Setup */
+        .back-side { background-color: white; padding: 15px; text-align: center; }
         .back-header {
             background: #710000;
             color: white;
@@ -96,6 +124,7 @@
             border-radius: 5px;
             margin-bottom: 15px;
             font-weight: bold;
+            border-bottom: 2px solid #d4af37;
         }
 
         .terms { font-size: 10px; color: #333; margin: 15px 10px; line-height: 1.4; text-align: justify; }
@@ -109,6 +138,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
+            border-top: 3px solid #d4af37;
         }
     </style>
 </head>
@@ -141,7 +171,7 @@
         </div>
 
         <div id="printArea" class="hidden flex flex-col items-center">
-            <div id="captureArea" class="p-4 bg-gray-100 rounded-lg border mb-6 flex flex-wrap justify-center gap-6" style="width: fit-content;">
+            <div id="captureArea" class="p-4 bg-gray-200 rounded-lg border mb-6 flex flex-wrap justify-center gap-6" style="width: fit-content;">
                 
                 <div class="card-container" id="frontCard">
                     <div class="card-header">
@@ -149,28 +179,31 @@
                         <p>বোয়ালমারী, ফরিদপুর। স্থাপিত: ১৯৯৪ খ্রি:</p>
                     </div>
                     <div class="logo-box">
-                        <svg viewBox="0 0 100 100" class="w-full h-full text-red-800" fill="currentColor">
-                            <circle cx="50" cy="50" r="45" fill="#710000"/>
-                            <circle cx="50" cy="50" r="38" fill="#fff"/>
-                            <text x="50%" y="55%" font-size="12" font-weight="bold" text-anchor="middle" fill="#710000">LOGO</text>
-                        </svg>
+                        <img src="https://i.ibb.co/L6V23Zz/logo.png" alt="NPDA Logo" class="w-full h-full object-contain">
                     </div>
                     <div class="photo-box">
-                        <svg id="userPhoto" viewBox="0 0 100 110" class="w-full h-full bg-gray-200 text-gray-400" fill="currentColor">
+                        <svg id="userPhoto" viewBox="0 0 100 110" class="w-full h-full bg-gray-300 text-gray-400" fill="currentColor">
                             <path d="M50 50c10 0 18-8 18-18s-18-18-18-18-18 8-18 18 8 18 18 18zm0 10c-15 0-45 8-45 23v7h90v-7c0-15-30-23-45-23z"/>
                         </svg>
                     </div>
-                    <div class="text-center">
-                        <div class="name-banner" id="resName">নাম এখানে</div>
-                        <p class="text-[10px] font-bold text-gray-500 mb-1" id="resTitle">পরিচয়পত্র</p>
+                    
+                    <div class="name-banner-wrapper text-center">
+                        <div class="name-banner" id="resName">হা. মাও. এনামুল হক শাকির</div>
                     </div>
-                    <table class="info-table">
-                        <tbody id="resTable"></tbody>
-                    </table>
+                    <p class="text-[10px] font-bold text-gray-500 text-center mb-1" id="resTitle">সহকারী শিক্ষক</p>
+                    
+                    <div class="info-table-container">
+                        <table class="info-table">
+                            <tbody id="resTable"></tbody>
+                        </table>
+                    </div>
+
                     <div class="signature-area">
-                        <div class="border-b border-gray-400 w-16 mx-auto"></div>
-                        <p class="mt-1 font-bold text-gray-600">প্রধান শিক্ষক</p>
+                        <div class="w-16 mx-auto text-xs text-blue-800 font-serif italic" style="line-height:0.5;">Motiur</div>
+                        <div class="border-b border-gray-400 w-16 mx-auto mt-1"></div>
+                        <p class="mt-1 font-bold text-gray-600">পরিচালকের স্বাক্ষর</p>
                     </div>
+                    <div class="front-footer-wave"></div>
                 </div>
 
                 <div class="card-container" id="backCard">
@@ -178,23 +211,25 @@
                         <div class="back-header">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</div>
                         <div class="terms">
                             <p class="font-bold text-center text-gray-700 mb-2">বিশেষ বার্তা / শর্তাবলী</p>
-                            <p>কার্ডটি হারিয়ে গেলে অবিলম্বে স্কুল কর্তৃপক্ষকে জানান। এই পরিচয়পত্রটি নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি-এর সম্পত্তি। কুড়িয়ে পেলে অনুগ্রহ করে নিচের ঠিকানায় বা বিদ্যালয়ে জমা দেওয়ার অনুরোধ রইল।</p>
+                            <p>এই কার্ডটি প্রতিষ্ঠানের নিজস্ব পরিচিতি। ব্যবহারকারী ব্যতীত অন্য কোথাও পাওয়া গেলে অনুগ্রহ করে মাদরাসার ঠিকানায় পৌঁছে দেওয়ার জন্য অনুরোধ করা হলো।</p>
                         </div>
-                        <div class="mt-4 flex justify-center">
+                        <div class="mt-6 flex justify-center">
                             <div class="p-1 border border-gray-400 rounded bg-white">
-                                <svg width="50" height="50" viewBox="0 0 100 100">
+                                <svg width="65" height="65" viewBox="0 0 100 100">
                                     <rect width="100" height="100" fill="white"/>
-                                    <rect x="10" y="10" width="30" height="30" fill="black"/>
-                                    <rect x="15" y="15" width="20" height="20" fill="white"/>
-                                    <rect x="18" y="18" width="14" height="14" fill="black"/>
-                                    <rect x="60" y="10" width="30" height="30" fill="black"/>
-                                    <rect x="65" y="15" width="20" height="20" fill="white"/>
-                                    <rect x="68" y="18" width="14" height="14" fill="black"/>
-                                    <rect x="10" y="60" width="30" height="30" fill="black"/>
-                                    <rect x="15" y="65" width="20" height="20" fill="white"/>
-                                    <rect x="18" y="68" width="14" height="14" fill="black"/>
-                                    <rect x="50" y="50" width="10" height="10" fill="black"/>
-                                    <rect x="70" y="70" width="15" height="15" fill="black"/>
+                                    <rect x="5" y="5" width="30" height="30" fill="#222"/>
+                                    <rect x="10" y="10" width="20" height="20" fill="white"/>
+                                    <rect x="14" y="14" width="12" height="12" fill="#222"/>
+                                    <rect x="65" y="5" width="30" height="30" fill="#222"/>
+                                    <rect x="70" y="10" width="20" height="20" fill="white"/>
+                                    <rect x="74" y="14" width="12" height="12" fill="#222"/>
+                                    <rect x="5" y="65" width="30" height="30" fill="#222"/>
+                                    <rect x="10" y="70" width="20" height="20" fill="white"/>
+                                    <rect x="14" y="74" width="12" height="12" fill="#222"/>
+                                    <rect x="45" y="45" width="15" height="15" fill="#222"/>
+                                    <rect x="75" y="75" width="15" height="15" fill="#222"/>
+                                    <rect x="50" y="20" width="8" height="8" fill="#222"/>
+                                    <rect x="20" y="50" width="8" height="8" fill="#222"/>
                                 </svg>
                             </div>
                         </div>
@@ -215,9 +250,9 @@
     </div>
 
     <script>
-        // ডেমো ডাটাবেজ
+        // Database
         const db = {
-            teacher: { "101": { name: "হা. মাও. এনামুল হক শাকির", index: "০১৯", title: "সহকারী শিক্ষক", father: "মরহুম নূরুল হক", dob: "১৫/১২/১৯৯০", mobile: "০১৭৬৬-৩৪৯৪২৪", blood: "B+" } },
+            teacher: { "101": { name: "হা. মাও. এনামুল হক শাকির", index: "০১৯", title: "सहকারী শিক্ষক", father: "মরহুম নূরুল হক", dob: "১৫/১২/১৯৯০", mobile: "০১৭৬৬-৩৪৯৪২৪", blood: "B+" } },
             staff: { "201": { name: "মোঃ করিম মিয়া", index: "৩০৫", title: "অফিস সহকারী", father: "মোঃ রহিম মিয়া", dob: "১০/০৫/১৯৯২", mobile: "০১৯১১-০০০০০০", blood: "O+" } },
             student: { "10": { "1": { name: "আব্দুল্লাহ আল মামুন", title: "ছাত্র", class: "দশম", roll: "১", session: "২০২৪-২৫", father: "মোঃ কাসেম", blood: "A+" } } }
         };
@@ -278,7 +313,7 @@
             }
         }
 
-        // 100% Reliable HTML to PDF Renderer using Canvas
+        // Professional A4 PDF Exporter
         async function downloadPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -286,22 +321,19 @@
             const frontCard = document.getElementById('frontCard');
             const backCard = document.getElementById('backCard');
             
-            // Render Front Card
+            // Capture Front Card Image
             const canvasFront = await html2canvas(frontCard, { scale: 3, useCORS: true, logging: false });
             const imgDataFront = canvasFront.toDataURL('image/jpeg', 1.0);
             
-            // Render Back Card
+            // Capture Back Card Image
             const canvasBack = await html2canvas(backCard, { scale: 3, useCORS: true, logging: false });
             const imgDataBack = canvasBack.toDataURL('image/jpeg', 1.0);
             
-            // Add to PDF (Front)
-            doc.addImage(imgDataFront, 'JPEG', 20, 20, 74, 116); // Centered portrait aspect matching 280x440
+            // Place Front and Back cards properly centered in PDF sheet
+            doc.addImage(imgDataFront, 'JPEG', 20, 25, 76, 118); 
+            doc.addImage(imgDataBack, 'JPEG', 112, 25, 76, 118);
             
-            // Add to PDF (Back)
-            doc.addImage(imgDataBack, 'JPEG', 110, 20, 74, 116);
-            
-            // Save Document
-            doc.save('NPDA_ID_Cards.pdf');
+            doc.save('NPDA_Official_ID_Cards.pdf');
         }
     </script>
 </body>
