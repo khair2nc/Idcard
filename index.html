@@ -1,19 +1,21 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>NPCD Academy ID Card Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>NPCD Academy ID Card</title>
+
+    <!-- FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- QR Code -->
+    <!-- QR CODE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- html2canvas -->
@@ -21,27 +23,37 @@
 
     <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
+
 <body>
 
-    <!-- Header -->
     <header>
+
         <h1>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h1>
-        <p>আইডি কার্ড জেনারেটর সিস্টেম</p>
+
+        <p>ID Card Generator System</p>
+
     </header>
 
-    <!-- Search Section -->
+    <!-- SEARCH -->
+
     <section class="search-box">
 
         <div class="input-group">
+
             <label>ক্যাটাগরি নির্বাচন করুন</label>
 
             <select id="category">
+
                 <option value="">-- নির্বাচন করুন --</option>
+
                 <option value="teacher">শিক্ষক</option>
+
                 <option value="staff">কর্মচারী</option>
-                <option value="student">স্টুডেন্ট</option>
+
             </select>
+
         </div>
 
         <div id="dynamicFields"></div>
@@ -50,76 +62,123 @@
 
     </section>
 
-    <!-- Card Preview -->
+    <!-- CARD -->
+
     <section id="cardSection" class="hidden">
 
         <div class="cards-container">
 
-            <!-- Front Card -->
+            <!-- FRONT -->
+
             <div class="id-card front-card" id="frontCard">
 
-                <div class="top-area">
+                <div class="top-header">
+
+                    <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
+
+                    <p>বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪</p>
+
+                </div>
+
+                <div class="logo-area">
 
                     <img src="assets/logo.png" class="logo">
 
-                    <div>
-                        <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
-                        <p>বোয়ালমারী, ফরিদপুর</p>
-                        <small>স্থাপিত: ১৯৯৪ খ্রি:</small>
+                </div>
+
+                <div class="photo-area">
+
+                    <img src="assets/sample-photo.jpg"
+                    id="personPhoto"
+                    class="person-photo">
+
+                </div>
+
+                <div class="name-box">
+
+                    <h3 id="personName">নাম</h3>
+
+                </div>
+
+                <div class="info-area">
+
+                    <div class="info-item">
+                        <span>পদবী</span>
+                        <span id="personType"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>ইনডেক্স</span>
+                        <span id="extraInfo1"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>বিষয়</span>
+                        <span id="extraInfo2"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>যোগদান</span>
+                        <span id="extraInfo3"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>মেয়াদ</span>
+                        <span id="extraInfo4"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>মোবাইল</span>
+                        <span id="extraInfo5"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span>রক্ত</span>
+                        <span id="extraInfo6"></span>
                     </div>
 
                 </div>
 
-                <div class="middle-area">
+                <div class="signature">
 
-                    <img src="assets/sample-photo.jpg" id="personPhoto" class="person-photo">
-
-                    <div class="person-info">
-
-                        <h3 id="personName">নাম</h3>
-
-                        <p id="personType">পদবী</p>
-
-                        <p id="extraInfo1"></p>
-                        <p id="extraInfo2"></p>
-                        <p id="extraInfo3"></p>
-                        <p id="extraInfo4"></p>
-
-                    </div>
-
-                </div>
-
-                <div class="signature-area">
-
-                    <img src="assets/principal-sign.png" class="sign">
+                    <img src="assets/principal-sign.png">
 
                     <p>প্রতিষ্ঠান প্রধান</p>
 
                 </div>
 
+                <div class="bottom-bar">
+
+                    OFFICIAL ID CARD
+
+                </div>
+
             </div>
 
-            <!-- Back Card -->
+            <!-- BACK -->
+
             <div class="id-card back-card" id="backCard">
 
-                <h3>যোগাযোগ</h3>
+                <div class="back-content">
 
-                <p>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</p>
+                    <h3>যোগাযোগ</h3>
 
-                <p>বোয়ালমারী, ফরিদপুর</p>
+                    <p>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</p>
 
-                <p>মোবাইল: 01700000000</p>
+                    <p>বোয়ালমারী, ফরিদপুর</p>
 
-                <p>ওয়েবসাইট: www.npcdacademy.edu.bd</p>
+                    <p>মোবাইল: 01700000000</p>
 
-                <div id="qrcode"></div>
+                    <p>ওয়েবসাইট: www.npcdacademy.edu.bd</p>
 
-                <div class="warning">
+                    <div id="qrcode"></div>
 
-                    <p>
+                    <div class="warning-box">
+
                         কার্ডটি হারিয়ে গেলে অবিলম্বে
                         স্কুল কর্তৃপক্ষকে জানান।
-                    </p>
+
+                    </div>
 
                 </div>
 
@@ -132,6 +191,7 @@
     </section>
 
     <!-- JS -->
+
     <script src="script.js"></script>
 
 </body>
