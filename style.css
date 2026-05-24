@@ -1,14 +1,15 @@
+/* style.css */
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: 'Hind Siliguri', sans-serif;
+    font-family:'Hind Siliguri', sans-serif;
 }
 
 body{
-    background:#f2f5ff;
+    background:#eef2f7;
     padding:30px;
-    color:#222;
 }
 
 header{
@@ -17,23 +18,25 @@ header{
 }
 
 header h1{
-    font-size:32px;
-    color:#1b2a52;
-}
-
-header p{
-    margin-top:8px;
-    color:#666;
+    color:#7a0000;
+    margin-bottom:8px;
 }
 
 .search-box{
+
     width:100%;
     max-width:500px;
+
     margin:auto;
+
     background:#fff;
+
     padding:25px;
-    border-radius:16px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+
+    border-radius:15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+
 }
 
 .input-group{
@@ -48,27 +51,35 @@ header p{
 
 .input-group input,
 .input-group select{
+
     width:100%;
+
     padding:12px;
+
     border:1px solid #ccc;
+
     border-radius:10px;
-    font-size:15px;
+
 }
 
 button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:#1b2a52;
-    color:#fff;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.3s;
-}
 
-button:hover{
-    background:#314b8f;
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#7a0000;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:16px;
+
 }
 
 .hidden{
@@ -76,135 +87,284 @@ button:hover{
 }
 
 .cards-container{
+
     display:flex;
+
     gap:30px;
+
     justify-content:center;
+
     flex-wrap:wrap;
-    margin-top:40px;
+
+    margin-top:30px;
+
 }
+
+/* REAL CARD SIZE */
 
 .id-card{
-    width:340px;
-    min-height:540px;
+
+    width:2.125in;
+    height:3.375in;
+
     background:#fff;
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+
     position:relative;
+
     overflow:hidden;
+
+    border-radius:12px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+
 }
+
+/* FRONT */
 
 .front-card{
-    background:linear-gradient(135deg,#ffffff,#dce7ff);
-    border-top:8px solid #23408e;
+    border:2px solid #7a0000;
 }
 
-.back-card{
-    background:linear-gradient(135deg,#ffffff,#e3f7ff);
-    border-top:8px solid #00a8cc;
+/* HEADER */
+
+.top-header{
+
+    background:#7a0000;
+
+    color:#fff;
+
+    text-align:center;
+
+    padding:8px 5px;
+
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
+
 }
 
-.top-area{
-    display:flex;
-    gap:15px;
-    align-items:center;
-    margin-bottom:25px;
+.top-header h2{
+    font-size:11px;
+}
+
+.top-header p{
+    font-size:7px;
+}
+
+/* LOGO */
+
+.logo-area{
+    text-align:center;
+    margin-top:8px;
 }
 
 .logo{
-    width:65px;
-    height:65px;
-    object-fit:cover;
+
+    width:38px;
+    height:38px;
+
+    object-fit:contain;
+
 }
 
-.top-area h2{
-    font-size:18px;
-    color:#1b2a52;
-}
+/* PHOTO */
 
-.middle-area{
+.photo-area{
     text-align:center;
+    margin-top:5px;
 }
 
 .person-photo{
-    width:120px;
-    height:120px;
-    border-radius:12px;
+
+    width:65px;
+    height:78px;
+
     object-fit:cover;
-    border:4px solid #fff;
-    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+
+    border:2px solid #7a0000;
+
 }
 
-.person-info{
-    margin-top:20px;
-}
+/* NAME */
 
-.person-info h3{
-    font-size:24px;
-    color:#102048;
-    margin-bottom:10px;
-}
+.name-box{
 
-.person-info p{
-    margin-bottom:8px;
-    font-size:15px;
-}
+    width:90%;
 
-.signature-area{
-    position:absolute;
-    bottom:20px;
-    right:20px;
+    margin:6px auto;
+
+    background:#7a0000;
+
+    color:#fff;
+
     text-align:center;
+
+    padding:4px;
+
+    border-radius:20px;
+
 }
 
-.sign{
-    width:90px;
+.name-box h3{
+    font-size:10px;
 }
 
-.signature-area p{
-    font-size:12px;
+/* INFO */
+
+.info-area{
+
+    padding:0 12px;
+
+    margin-top:5px;
+
 }
 
-.back-card h3{
-    margin-bottom:20px;
-    color:#1b2a52;
+.info-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:7px;
+
+    margin-bottom:4px;
+
+    border-bottom:1px dashed #ccc;
+
+    padding-bottom:2px;
+
 }
 
-.back-card p{
+.info-item span:first-child{
+
+    font-weight:bold;
+
+    color:#7a0000;
+
+}
+
+/* SIGN */
+
+.signature{
+
+    position:absolute;
+
+    right:10px;
+
+    bottom:18px;
+
+    text-align:center;
+
+}
+
+.signature img{
+    width:45px;
+}
+
+.signature p{
+    font-size:6px;
+}
+
+/* FOOTER */
+
+.bottom-bar{
+
+    position:absolute;
+
+    bottom:0;
+
+    width:100%;
+
+    background:#7a0000;
+
+    color:#fff;
+
+    text-align:center;
+
+    padding:5px;
+
+    border-top-left-radius:25px;
+    border-top-right-radius:25px;
+
+    font-size:6px;
+
+}
+
+/* BACK CARD */
+
+.back-card{
+    border:2px solid #7a0000;
+}
+
+.back-content{
+
+    padding:15px 10px;
+
+    text-align:center;
+
+}
+
+.back-content h3{
+
+    color:#7a0000;
+
     margin-bottom:10px;
-    font-size:14px;
+
+    font-size:10px;
+
+}
+
+.back-content p{
+
+    font-size:7px;
+
+    margin-bottom:5px;
+
 }
 
 #qrcode{
-    margin:25px auto;
-    width:120px;
+
+    margin:12px auto;
+
+    width:70px;
+
 }
 
-.warning{
-    margin-top:20px;
-    padding:12px;
-    background:#fff3cd;
-    border-radius:10px;
-    font-size:13px;
+/* WARNING */
+
+.warning-box{
+
+    margin-top:10px;
+
+    background:#fff4e6;
+
+    padding:8px;
+
+    border-radius:8px;
+
+    font-size:6px;
+
+    line-height:1.5;
+
 }
+
+/* DOWNLOAD */
 
 #downloadBtn{
-    margin-top:30px;
+
     max-width:300px;
+
+    margin:30px auto;
+
     display:block;
-    margin-left:auto;
-    margin-right:auto;
+
 }
+
+/* MOBILE */
 
 @media(max-width:768px){
 
     body{
         padding:15px;
-    }
-
-    .id-card{
-        width:100%;
-        max-width:340px;
     }
 
 }
