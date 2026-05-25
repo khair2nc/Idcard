@@ -2,58 +2,826 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<title>School ID Card Generator</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Card Generator — নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --app-bg: #0d1117;
+  --panel-bg: rgba(255,255,255,0.04);
+  --panel-border: rgba(255,255,255,0.08);
+  --text-h: #f0f4ff;
+  --text-s: rgba(240,244,255,0.55);
+  --text-m: rgba(240,244,255,0.30);
+  --blue: #4a9eff;
+  --teal: #38d9c0;
+  --green: #34d399;
+  --purple: #a78bfa;
+  --gold: #f0c060;
+  --rose: #fb7185;
 
+  /* Card theme colors */
+  --teacher-c: #7a1020;
+  --teacher-cl: #a01428;
+  --teacher-bg: #fff8f8;
+  --employee-c: #0f4c35;
+  --employee-cl: #186645;
+  --employee-bg: #f6fdf9;
+  --student-c: #1a2e62;
+  --student-cl: #243e88;
+  --student-bg: #f5f8ff;
+
+  --font-ui: 'DM Sans', sans-serif;
+  --font-bn: 'Hind Siliguri', sans-serif;
+  --font-disp: 'Playfair Display', serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  background: var(--app-bg);
+  color: var(--text-h);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content:''; position:fixed; top:-20%; left:-10%; width:55%; height:55%;
+  background: radial-gradient(ellipse, rgba(74,158,255,.07) 0%, transparent 70%);
+  pointer-events:none; z-index:0;
+}
+body::after {
+  content:''; position:fixed; bottom:-10%; right:-5%; width:45%; height:45%;
+  background: radial-gradient(ellipse, rgba(167,139,250,.06) 0%, transparent 70%);
+  pointer-events:none; z-index:0;
+}
+
+/* ─── SITE HEADER ─── */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,17,23,.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--panel-border);
+  padding: 0 32px;
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 66px; gap: 16px;
+}
+.logo-mark { display: flex; align-items: center; gap: 13px; }
+.logo-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  display: grid; place-items: center; font-size: 18px;
+  box-shadow: 0 4px 14px rgba(74,158,255,.35); flex-shrink: 0;
+}
+.logo-text .sn { font-family: var(--font-bn); font-weight: 700; font-size: 13px; display: block; line-height: 1.3; }
+.logo-text .sa { font-size: 11px; color: var(--text-m); display: block; }
+.hbadge {
+  background: rgba(74,158,255,.12); border: 1px solid rgba(74,158,255,.22);
+  border-radius: 20px; padding: 5px 14px; font-size: 11.5px; color: #7ec8e3; font-weight: 600;
+}
+
+/* ─── MAIN ─── */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 36px 24px 80px; position: relative; z-index: 1; }
+
+/* ─── HERO ─── */
+.hero { text-align: center; padding: 44px 0 52px; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(240,192,96,.1); border: 1px solid rgba(240,192,96,.2);
+  border-radius: 20px; padding: 5px 15px; font-size: 11px;
+  color: var(--gold); font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.hero-title {
+  font-family: var(--font-disp); font-size: clamp(30px,5vw,54px);
+  font-weight: 900; line-height: 1.1; margin-bottom: 14px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,.65) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub { font-family: var(--font-bn); font-size: 14.5px; color: var(--text-s); max-width: 500px; margin: 0 auto 28px; }
+.hero-pills { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 30px; padding: 7px 16px; font-size: 12.5px;
+}
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─── TYPE TABS ─── */
+.type-tabs {
+  display: flex; gap: 6px; background: var(--panel-bg);
+  border: 1px solid var(--panel-border); border-radius: 13px; padding: 5px; margin-bottom: 32px;
+}
+.ttab {
+  flex: 1; padding: 10px 18px; border-radius: 9px; font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: all .22s; text-align: center;
+  color: var(--text-m); background: transparent; border: none; font-family: var(--font-ui);
+}
+.ttab.active {
+  background: rgba(74,158,255,.18); border: 1px solid rgba(74,158,255,.28);
+  color: var(--text-h); box-shadow: 0 2px 10px rgba(74,158,255,.18);
+}
+.ttab:hover:not(.active) { background: rgba(255,255,255,.05); color: var(--text-s); }
+
+/* ─── SEARCH PANEL ─── */
+.search-panel {
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 18px; padding: 32px; margin-bottom: 40px;
+  backdrop-filter: blur(10px); position: relative; overflow: hidden;
+}
+.search-panel::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--blue), var(--teal), transparent);
+}
+.ptitle {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12px; font-weight: 600; color: var(--text-m);
+  text-transform: uppercase; letter-spacing: .09em; margin-bottom: 24px;
+}
+.ptitle-icon {
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, rgba(74,158,255,.2), rgba(56,217,192,.15));
+  border: 1px solid rgba(74,158,255,.2); border-radius: 6px;
+  display: grid; place-items: center; font-size: 12px;
+}
+.search-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.fg { display: flex; flex-direction: column; gap: 7px; }
+.flabel { font-size: 11.5px; font-weight: 600; color: var(--text-m); text-transform: uppercase; letter-spacing: .07em; }
+.finput, .fselect {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 9px; padding: 11px 14px; color: var(--text-h);
+  font-family: var(--font-ui); font-size: 13.5px; transition: all .2s; outline: none; width: 100%;
+  -webkit-appearance: none; appearance: none;
+}
+.finput::placeholder { color: var(--text-m); }
+.finput:focus, .fselect:focus {
+  border-color: var(--blue); background: rgba(74,158,255,.08);
+  box-shadow: 0 0 0 3px rgba(74,158,255,.1);
+}
+.fselect option { background: #111827; color: white; }
+.swrap { position: relative; }
+.swrap::after { content:'▾'; position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--text-m); pointer-events:none; font-size:12px; }
+.search-acts { display: flex; gap: 10px; flex-wrap: wrap; }
+.notif {
+  padding: 12px 16px; border-radius: 9px; font-size: 13.5px;
+  font-family: var(--font-bn); display: none; align-items: center; gap: 9px; margin-bottom: 18px;
+}
+.notif.show { display: flex; }
+.notif.err { background: rgba(251,113,133,.1); border: 1px solid rgba(251,113,133,.22); color: var(--rose); }
+.notif.ok  { background: rgba(52,211,153,.1);  border: 1px solid rgba(52,211,153,.22);  color: var(--green); }
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 22px; border-radius: 9px;
+  font-family: var(--font-ui); font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: all .2s; border: none; outline: none; white-space: nowrap;
+}
+.btn-primary { background: linear-gradient(135deg, #4a9eff, #2d7fff); color: white; box-shadow: 0 4px 14px rgba(74,158,255,.3); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(74,158,255,.45); }
+.btn-ghost { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); color: var(--text-s); }
+.btn-ghost:hover { background: rgba(255,255,255,.1); color: var(--text-h); }
+.btn-gold { background: linear-gradient(135deg, #f0c060, #e6a820); color: #2d1800; box-shadow: 0 4px 14px rgba(240,192,96,.3); }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(240,192,96,.45); }
+
+/* ─── OUTPUT ─── */
+.output-sec { display: none; }
+.output-sec.show { display: block; }
+.out-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.out-title { font-family: var(--font-disp); font-size: 21px; font-weight: 700; }
+.out-acts { display: flex; gap: 9px; flex-wrap: wrap; }
+.cards-display { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+.flip-hint { text-align: center; margin-top: 14px; font-size: 12px; color: var(--text-m); }
+
+/* ─── CARD FLIP CONTAINER ─── */
+.card-wrap { perspective: 1100px; cursor: pointer; }
+.card-inner {
+  width: 360px; height: 548px;
+  position: relative; transition: transform .75s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d;
+}
+.card-wrap.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; overflow: hidden;
+}
+.card-face.back { transform: rotateY(180deg); }
+
+/* ══════════════════════════════════════════
+   ID CARD BASE — WHITE CARD DESIGN
+══════════════════════════════════════════ */
+.id-card {
+  width: 100%; height: 100%;
+  background: #fff;
+  border-radius: 14px;
+  display: flex; flex-direction: column;
+  font-family: var(--font-bn);
+  box-shadow: 0 20px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.12);
+  overflow: hidden;
+}
+
+/* ── CARD HEADER BLOCK ── */
+.card-top {
+  padding: 18px 18px 14px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-bottom: 3px solid;
+  flex-shrink: 0;
+}
+
+/* Circular logo */
+.c-logo {
+  width: 58px; height: 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+  border: 3px solid;
+  box-shadow: 0 3px 12px rgba(0,0,0,.2);
+}
+
+.c-school-info { flex: 1; min-width: 0; }
+.c-school-name {
+  font-weight: 700; font-size: 14px; line-height: 1.25;
+  display: block; letter-spacing: .01em;
+}
+.c-school-addr {
+  font-size: 10.5px; opacity: .7; display: block; margin-top: 3px; line-height: 1.4;
+}
+.c-type-pill {
+  font-family: var(--font-ui); font-size: 9px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px;
+  align-self: flex-start; flex-shrink: 0; color: #fff;
+}
+
+/* ── PHOTO AREA ── */
+.c-photo-wrap {
+  display: flex; justify-content: center;
+  padding: 16px 18px 12px; flex-shrink: 0;
+}
+.c-photo {
+  width: 108px; height: 128px;
+  border: 3px solid; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 50px; overflow: hidden;
+  background: #f5f5f5;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+}
+.c-photo img { width:100%; height:100%; object-fit:cover; }
+
+/* ── NAME BANNER ── */
+.c-name-banner {
+  margin: 0; padding: 10px 18px;
+  text-align: center; color: #fff;
+  font-size: 19px; font-weight: 700; letter-spacing: .02em;
+  flex-shrink: 0;
+}
+
+/* ── DETAILS TABLE ── */
+.c-details { flex: 1; padding: 10px 18px 0; }
+.c-row {
+  display: flex; align-items: center;
+  padding: 7px 0;
+  border-bottom: 1.5px dashed rgba(0,0,0,.1);
+}
+.c-row:last-child { border-bottom: none; }
+.c-lbl {
+  font-weight: 600; font-size: 12px; min-width: 88px; flex-shrink: 0;
+}
+.c-sep { font-size: 11px; opacity: .4; margin: 0 6px; }
+.c-val { font-size: 12px; color: #2a2a2a; flex: 1; }
+.c-blood-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  border-radius: 12px; padding: 2px 9px; font-size: 11px; font-weight: 700;
+  font-family: var(--font-ui);
+}
+
+/* ── CARD FOOTER ── */
+.c-footer {
+  margin-top: 10px; padding: 9px 18px 12px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  color: #fff; flex-shrink: 0;
+}
+.c-footer-label {
+  font-family: var(--font-ui); font-size: 9px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase; opacity: .9;
+}
+.c-sig-area { text-align: center; }
+.c-sig-line { width: 90px; height: 1px; background: rgba(255,255,255,.5); margin: 0 auto 4px; }
+.c-sig-label { font-family: var(--font-ui); font-size: 8px; opacity: .75; text-transform: uppercase; letter-spacing: .07em; }
+
+/* ══ BACK CARD ══ */
+.id-card-back { background: #fff; }
+
+.cb-header {
+  padding: 16px 18px 13px; text-align: center;
+  color: #fff; flex-shrink: 0; border-bottom: 3px solid;
+}
+.cb-header-title {
+  font-family: var(--font-bn); font-size: 18px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+}
+.cb-header-logo {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.25); border: 2px solid rgba(255,255,255,.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.cb-body { flex: 1; padding: 14px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.cb-info { width: 100%; text-align: center; }
+.cb-info-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 12.5px; font-family: var(--font-bn); justify-content: center; }
+.cb-icon { font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+.cb-txt { color: #333; line-height: 1.4; }
+.cb-divider { width: 80%; height: 1px; background: rgba(0,0,0,.08); margin: 2px auto; }
+
+.cb-qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.cb-qr-frame {
+  background: white; border-radius: 10px; padding: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15); border: 1.5px solid rgba(0,0,0,.08);
+}
+.cb-qr-label { font-size: 9.5px; color: #888; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .07em; }
+
+.cb-warning {
+  margin: 0 0 14px; padding: 9px 14px;
+  border-radius: 9px; display: flex; gap: 8px; align-items: flex-start;
+  background: rgba(255,193,7,.08); border: 1.5px solid rgba(255,193,7,.3);
+  width: 100%;
+}
+.cw-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.cw-txt { font-size: 10.5px; color: #6b4c00; font-family: var(--font-bn); line-height: 1.5; }
+
+/* ══ THEME COLORS ══ */
+/* Teacher */
+.t-card .card-top { border-color: var(--teacher-c); background: var(--teacher-bg); }
+.t-card .c-logo { background: linear-gradient(135deg,#fff,#ffe8ea); border-color: var(--teacher-c); color: var(--teacher-c); }
+.t-card .c-school-name { color: var(--teacher-c); }
+.t-card .c-school-addr { color: var(--teacher-c); }
+.t-card .c-type-pill { background: var(--teacher-c); }
+.t-card .c-photo { border-color: var(--teacher-c); }
+.t-card .c-name-banner { background: var(--teacher-c); }
+.t-card .c-lbl { color: var(--teacher-c); }
+.t-card .c-footer { background: var(--teacher-c); }
+.t-card .c-blood-badge { background: rgba(122,16,32,.1); border: 1px solid rgba(122,16,32,.25); color: var(--teacher-c); }
+.t-back .cb-header { background: var(--teacher-c); border-color: var(--teacher-cl); }
+.t-back .cb-icon { color: var(--teacher-c); }
+
+/* Employee */
+.e-card .card-top { border-color: var(--employee-c); background: var(--employee-bg); }
+.e-card .c-logo { background: linear-gradient(135deg,#fff,#d4f5e5); border-color: var(--employee-c); color: var(--employee-c); }
+.e-card .c-school-name { color: var(--employee-c); }
+.e-card .c-school-addr { color: var(--employee-c); }
+.e-card .c-type-pill { background: var(--employee-c); }
+.e-card .c-photo { border-color: var(--employee-c); }
+.e-card .c-name-banner { background: var(--employee-c); }
+.e-card .c-lbl { color: var(--employee-c); }
+.e-card .c-footer { background: var(--employee-c); }
+.e-card .c-blood-badge { background: rgba(15,76,53,.1); border: 1px solid rgba(15,76,53,.25); color: var(--employee-c); }
+.e-back .cb-header { background: var(--employee-c); border-color: var(--employee-cl); }
+.e-back .cb-icon { color: var(--employee-c); }
+
+/* Student */
+.s-card .card-top { border-color: var(--student-c); background: var(--student-bg); }
+.s-card .c-logo { background: linear-gradient(135deg,#fff,#dce6ff); border-color: var(--student-c); color: var(--student-c); }
+.s-card .c-school-name { color: var(--student-c); }
+.s-card .c-school-addr { color: var(--student-c); }
+.s-card .c-type-pill { background: var(--student-c); }
+.s-card .c-photo { border-color: var(--student-c); }
+.s-card .c-name-banner { background: var(--student-c); }
+.s-card .c-lbl { color: var(--student-c); }
+.s-card .c-footer { background: var(--student-c); }
+.s-card .c-blood-badge { background: rgba(26,46,98,.1); border: 1px solid rgba(26,46,98,.25); color: var(--student-c); }
+.s-back .cb-header { background: var(--student-c); border-color: var(--student-cl); }
+.s-back .cb-icon { color: var(--student-c); }
+
+/* ─── DATA SECTION ─── */
+.data-sec { margin-top: 52px; }
+.sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.sec-title { font-family: var(--font-disp); font-size: 21px; font-weight: 700; display: flex; align-items: center; gap: 9px; }
+.data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.dc {
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 13px; padding: 16px 18px; cursor: pointer;
+  transition: all .22s; position: relative; overflow: hidden;
+}
+.dc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; opacity:0; transition:opacity .22s; }
+.dc.t-dc::before { background: linear-gradient(90deg,var(--teacher-c),#e05070); }
+.dc.e-dc::before { background: linear-gradient(90deg,var(--employee-c),#38d399); }
+.dc.s-dc::before { background: linear-gradient(90deg,var(--student-c),#6694f8); }
+.dc:hover { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.13); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+.dc:hover::before { opacity: 1; }
+.dc-top { display: flex; align-items: center; gap: 11px; margin-bottom: 11px; }
+.dc-av { width: 42px; height: 42px; border-radius: 9px; display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.dc.t-dc .dc-av { background: rgba(122,16,32,.15); }
+.dc.e-dc .dc-av { background: rgba(15,76,53,.15); }
+.dc.s-dc .dc-av { background: rgba(26,46,98,.15); }
+.dc-name { font-family: var(--font-bn); font-weight: 700; font-size: 15px; display: block; }
+.dc-sub { font-size: 11px; color: var(--text-m); display: block; margin-top: 1px; }
+.dc-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.dc-chip { background: rgba(255,255,255,.06); border: 1px solid var(--panel-border); border-radius: 20px; padding: 3px 9px; font-size: 10.5px; color: var(--text-s); }
+.dc-action { position:absolute; bottom:12px; right:14px; font-size:10px; color:var(--text-m); opacity:0; transition:opacity .2s; }
+.dc:hover .dc-action { opacity: 1; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  .site-header{padding:0 16px;}
+  .wrap{padding:22px 14px 60px;}
+  .search-panel{padding:22px 16px;}
+  .search-grid{grid-template-columns:1fr 1fr;}
+  .card-inner{width:310px;height:472px;}
+}
+@media(max-width:480px){
+  .search-grid{grid-template-columns:1fr;}
+  .card-inner{width:285px;height:434px;}
+  .c-name-banner{font-size:16px;}
+  .type-tabs{gap:3px;}
+  .ttab{padding:8px 10px;font-size:11.5px;}
+}
+</style>
+</head>
 <body>
 
-<div class="header">
-    <h2>নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</h2>
-    <p>বোয়ালমারী, ফরিদপুর | স্থাপিত: ১৯৯৪ খ্রি:</p>
-</div>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-mark">
+      <div class="logo-icon">🏫</div>
+      <div class="logo-text">
+        <span class="sn">নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি</span>
+        <span class="sa">বোয়ালমারী, ফরিদপুর · প্রতিষ্ঠাকাল ১৯৯৪</span>
+      </div>
+    </div>
+    <div class="hbadge">ID Card System</div>
+  </div>
+</header>
 
-<!-- SEARCH -->
-<div class="search-box">
+<div class="wrap">
 
-<select id="type" onchange="updateFields()">
-    <option value="">Select Type</option>
-    <option value="teacher">Teacher</option>
-    <option value="employee">Employee</option>
-    <option value="student">Student</option>
-</select>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">✦ অফিসিয়াল পরিচয়পত্র সিস্টেম</div>
+    <h1 class="hero-title">ID Card Generator</h1>
+    <p class="hero-sub">শিক্ষক, কর্মচারী ও শিক্ষার্থীদের পরিচয়পত্র তৈরি করুন মুহূর্তেই।</p>
+    <div class="hero-pills">
+      <div class="pill"><div class="pill-dot" style="background:#e05070;box-shadow:0 0 5px #e05070"></div>শিক্ষক</div>
+      <div class="pill"><div class="pill-dot" style="background:#34d399;box-shadow:0 0 5px #34d399"></div>কর্মচারী</div>
+      <div class="pill"><div class="pill-dot" style="background:#6694f8;box-shadow:0 0 5px #6694f8"></div>শিক্ষার্থী</div>
+    </div>
+  </div>
 
-<select id="searchBy">
-    <option value="index">ইনডেক্স নং</option>
-    <option value="dob">জন্মতারিখ</option>
-    <option value="class">শ্রেণি</option>
-    <option value="roll">রোল</option>
-</select>
+  <!-- TYPE TABS -->
+  <div class="type-tabs">
+    <button class="ttab active" onclick="setTab('teacher',this)">👨‍🏫 শিক্ষক</button>
+    <button class="ttab" onclick="setTab('employee',this)">👷 কর্মচারী</button>
+    <button class="ttab" onclick="setTab('student',this)">🎒 শিক্ষার্থী</button>
+  </div>
 
-<input type="text" id="searchValue" placeholder="Search value">
+  <!-- SEARCH PANEL -->
+  <div class="search-panel">
+    <div class="ptitle"><div class="ptitle-icon">🔍</div>পরিচয়পত্র অনুসন্ধান</div>
+    <div class="search-grid">
+      <div class="fg" id="grp-index">
+        <label class="flabel">ইনডেক্স নম্বর</label>
+        <input class="finput" id="s-index" placeholder="যেমন: ১০৫২০৪০">
+      </div>
+      <div class="fg" id="grp-dob">
+        <label class="flabel">জন্ম তারিখ (ঐচ্ছিক)</label>
+        <input class="finput" id="s-dob" placeholder="DD-MM-YYYY">
+      </div>
+      <div class="fg" id="grp-class" style="display:none">
+        <label class="flabel">শ্রেণী</label>
+        <div class="swrap">
+          <select class="fselect" id="s-class">
+            <option value="">শ্রেণী নির্বাচন করুন</option>
+            <option>ষষ্ঠ</option><option>সপ্তম</option><option>অষ্টম</option>
+            <option>নবম</option><option>দশম</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" id="grp-roll" style="display:none">
+        <label class="flabel">রোল নম্বর</label>
+        <input class="finput" id="s-roll" placeholder="যেমন: ০১">
+      </div>
+      <div class="fg">
+        <label class="flabel">নাম (ঐচ্ছিক)</label>
+        <input class="finput" id="s-name" placeholder="নাম লিখুন">
+      </div>
+    </div>
+    <div id="notif" class="notif"></div>
+    <div class="search-acts">
+      <button class="btn btn-primary" onclick="doSearch()">🔍 অনুসন্ধান</button>
+      <button class="btn btn-ghost" onclick="showAll()">📋 সকল রেকর্ড</button>
+      <button class="btn btn-ghost" onclick="clearAll()">✕ পরিষ্কার</button>
+    </div>
+  </div>
 
-<button onclick="searchCard()">Search</button>
+  <!-- OUTPUT -->
+  <div class="output-sec" id="outSec">
+    <div class="out-header">
+      <div class="out-title" id="outTitle">পরিচয়পত্র</div>
+      <div class="out-acts">
+        <button class="btn btn-ghost" onclick="flipCard()">🔄 উল্টান</button>
+        <button class="btn btn-gold" id="pdfBtn" onclick="dlPDF()">⬇ PDF ডাউনলোড</button>
+      </div>
+    </div>
+    <div class="cards-display" id="cardsOut"></div>
+    <div class="flip-hint">💡 কার্ডে ক্লিক করলে সামনে ও পিছন দেখা যাবে</div>
+  </div>
 
-</div>
+  <!-- DATA BROWSER -->
+  <div class="data-sec" id="dataSec" style="display:none">
+    <div class="sec-hdr">
+      <div class="sec-title">📁 সকল রেকর্ড</div>
+      <button class="btn btn-ghost" style="font-size:12px" onclick="document.getElementById('dataSec').style.display='none'">✕ বন্ধ</button>
+    </div>
+    <div class="data-grid" id="dataGrid"></div>
+  </div>
 
-<!-- FORM -->
-<div class="form">
-    <input type="text" id="name" placeholder="নাম">
-    <input type="text" id="id" placeholder="ইনডেক্স / রোল">
-    <input type="text" id="dob" placeholder="জন্মতারিখ">
-    <input type="text" id="class" placeholder="শ্রেণি">
-    <input type="text" id="position" placeholder="পদবী">
-    <input type="text" id="join" placeholder="যোগদান">
-    <input type="text" id="expire" placeholder="মেয়াদ">
-    <input type="text" id="phone" placeholder="মোবাইল">
-    <input type="text" id="blood" placeholder="রক্তের গ্রুপ">
-    <button onclick="generateCard()">Generate</button>
-</div>
+</div><!-- /wrap -->
 
-<!-- CARD -->
-<div id="cardArea"></div>
+<script>
+/* ══════════════════ DATA ══════════════════ */
+const SCHOOL = {
+  name: "নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি",
+  addr: "বোয়ালমারী, ফরিদপুর",
+  est:  "১৯৯৪",
+  phone: "০২-৪৭৭৮৯০০১",
+  principal: "০১৭১২-৩৪৫৬৭৮",
+  web: "www.npdacademy.edu.bd"
+};
 
-<script src="script.js"></script>
+const TEACHERS = [
+  { type:"teacher", name:"রেবা পারভীন", desg:"সহকারী শিক্ষক", subj:"সমাজ বিজ্ঞান",
+    index:"১০৫২০৪০", joining:"০৫-০১-২০০৫", expiry:"১১-০১-২০৩৪",
+    mobile:"০১৭১৪-৫৬২৬২৬", blood:"AB+", dob:"12-05-1978", photo:null },
+  { type:"teacher", name:"মোঃ আরিফুল ইসলাম", desg:"সিনিয়র শিক্ষক", subj:"বাংলা",
+    index:"১০৩৪৫৬০", joining:"১২-০৩-২০০০", expiry:"১৫-০৩-২০৩৫",
+    mobile:"০১৮১৬-৭৮৯০১২", blood:"B+", dob:"20-09-1972", photo:null },
+  { type:"teacher", name:"নাসরিন আক্তার", desg:"সহকারী শিক্ষক", subj:"গণিত",
+    index:"১০৬৭৮৯০", joining:"২২-০৬-২০১০", expiry:"২২-০৬-২০৩৫",
+    mobile:"০১৯৩৩-৪৫৬৭৮৯", blood:"O+", dob:"14-02-1985", photo:null }
+];
+
+const EMPLOYEES = [
+  { type:"employee", name:"কামরুল হাসান", desg:"অফিস সহকারী", subj:"—",
+    index:"২০১২৩৪৫", joining:"০১-০৭-২০০৮", expiry:"০১-০৭-২০৩৩",
+    mobile:"০১৬১১-২২৩৩৪৪", blood:"A+", dob:"05-11-1980", photo:null },
+  { type:"employee", name:"সুমন বিশ্বাস", desg:"নৈশপ্রহরী", subj:"—",
+    index:"২০৯৮৭৬৫", joining:"১৫-০৮-২০১৫", expiry:"১৫-০৮-২০৩৫",
+    mobile:"০১৭৫৫-৬৬৭৭৮৮", blood:"O−", dob:"30-06-1988", photo:null }
+];
+
+const STUDENTS = [
+  { type:"student", name:"রাহেলা খানম", cls:"দশম", roll:"০১", sec:"ক",
+    year:"২০২৪-২০২৫", blood:"A+", mobile:"০১৮৮৮-৯৯০০১১", photo:null },
+  { type:"student", name:"তানভীর আহমেদ", cls:"নবম", roll:"০৫", sec:"খ",
+    year:"২০২৪-২০২৫", blood:"B+", mobile:"০১৯৯৯-০০১১২২", photo:null },
+  { type:"student", name:"সুমাইয়া ইসলাম", cls:"অষ্টম", roll:"০৩", sec:"ক",
+    year:"২০২৪-২০২৫", blood:"AB−", mobile:"০১৭৭৭-৮৮৯৯০০", photo:null }
+];
+
+/* ══════════════════ STATE ══════════════════ */
+let activeType = "teacher";
+let currentRec  = null;
+let isFlipped   = false;
+let qrN = 0;
+
+/* ══════════════════ TABS ══════════════════ */
+function setTab(type, btn){
+  activeType = type;
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const isStudent = type==='student';
+  document.getElementById('grp-index').style.display = isStudent?'none':'';
+  document.getElementById('grp-dob').style.display   = isStudent?'none':'';
+  document.getElementById('grp-class').style.display = isStudent?'':'none';
+  document.getElementById('grp-roll').style.display  = isStudent?'':'none';
+  clearAll();
+}
+
+/* ══════════════════ SEARCH ══════════════════ */
+function doSearch(){
+  const ds = activeType==='teacher'?TEACHERS: activeType==='employee'?EMPLOYEES:STUDENTS;
+  let res = null;
+  if(activeType==='student'){
+    const cls  = document.getElementById('s-class').value;
+    const roll = document.getElementById('s-roll').value.trim();
+    const nm   = document.getElementById('s-name').value.trim();
+    if(!cls&&!roll&&!nm){showNotif('শ্রেণী, রোল বা নাম লিখুন।','err');return;}
+    res = ds.find(r=>(!cls||r.cls===cls)&&(!roll||r.roll===roll)&&(!nm||r.name.includes(nm)));
+  } else {
+    const idx = document.getElementById('s-index').value.trim();
+    const nm  = document.getElementById('s-name').value.trim();
+    if(!idx&&!nm){showNotif('ইনডেক্স নম্বর বা নাম লিখুন।','err');return;}
+    res = ds.find(r=>(!idx||r.index===idx)&&(!nm||r.name.includes(nm)));
+  }
+  if(!res){showNotif('কোনো রেকর্ড পাওয়া যায়নি।','err');document.getElementById('outSec').classList.remove('show');return;}
+  showNotif('রেকর্ড পাওয়া গেছে! কার্ড প্রস্তুত।','ok');
+  renderCard(res);
+}
+
+function showAll(){
+  const all=[...TEACHERS,...EMPLOYEES,...STUDENTS];
+  document.getElementById('dataSec').style.display='';
+  buildGrid(all);
+}
+
+function clearAll(){
+  ['s-index','s-dob','s-name','s-roll'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-class').value='';
+  document.getElementById('notif').classList.remove('show');
+  document.getElementById('outSec').classList.remove('show');
+}
+
+function showNotif(msg,type){
+  const n=document.getElementById('notif');
+  n.className=`notif show ${type}`;
+  n.innerHTML=(type==='err'?'⚠ ':'✓ ')+msg;
+  setTimeout(()=>n.classList.remove('show'),4000);
+}
+
+/* ══════════════════ DATA GRID ══════════════════ */
+function buildGrid(data){
+  const g=document.getElementById('dataGrid');
+  g.innerHTML=data.map((r,i)=>{
+    const all=[...TEACHERS,...EMPLOYEES,...STUDENTS];
+    const gi=all.indexOf(r);
+    const icon=r.type==='teacher'?'👨‍🏫':r.type==='employee'?'👷':'🎒';
+    const dcls=r.type==='teacher'?'t-dc':r.type==='employee'?'e-dc':'s-dc';
+    const sub=r.type==='student'?`শ্রেণী ${r.cls} | রোল ${r.roll}`:`${r.desg} | ${r.index}`;
+    return `<div class="dc ${dcls}" onclick="quickLoad(${gi})">
+      <div class="dc-top">
+        <div class="dc-av">${icon}</div>
+        <div><span class="dc-name">${r.name}</span><span class="dc-sub">${sub}</span></div>
+      </div>
+      <div class="dc-chips">
+        <span class="dc-chip">🩸 ${r.blood}</span>
+        ${r.type!=='student'?`<span class="dc-chip">📱 ${r.mobile}</span>`:`<span class="dc-chip">📅 ${r.year}</span>`}
+      </div>
+      <span class="dc-action">→ কার্ড দেখুন</span>
+    </div>`;
+  }).join('');
+}
+
+function quickLoad(i){
+  const all=[...TEACHERS,...EMPLOYEES,...STUDENTS];
+  renderCard(all[i]);
+  document.getElementById('dataSec').style.display='none';
+  document.getElementById('outSec').scrollIntoView({behavior:'smooth'});
+}
+
+/* ══════════════════ CARD RENDERER ══════════════════ */
+function renderCard(rec){
+  currentRec=rec; isFlipped=false; qrN++;
+  const qid='qr'+qrN;
+  const label=rec.type==='teacher'?'শিক্ষক পরিচয়পত্র':rec.type==='employee'?'কর্মচারী পরিচয়পত্র':'শিক্ষার্থী পরিচয়পত্র';
+  document.getElementById('outTitle').textContent=label+' — '+rec.name;
+
+  const tpfx = rec.type==='teacher'?'t':rec.type==='employee'?'e':'s';
+  const badge = rec.type==='teacher'?'TEACHER ID':rec.type==='employee'?'EMPLOYEE ID':'STUDENT ID';
+  const photoEl = rec.photo?`<img src="${rec.photo}" alt="photo">`:(rec.type==='student'?'👦':'👤');
+
+  /* FRONT ROWS */
+  let rows='';
+  if(rec.type==='student'){
+    rows=`
+      <div class="c-row"><span class="c-lbl">শ্রেণী</span><span class="c-sep">:</span><span class="c-val">${rec.cls} (${rec.sec} শাখা)</span></div>
+      <div class="c-row"><span class="c-lbl">রোল</span><span class="c-sep">:</span><span class="c-val">${rec.roll}</span></div>
+      <div class="c-row"><span class="c-lbl">শিক্ষাবর্ষ</span><span class="c-sep">:</span><span class="c-val">${rec.year}</span></div>
+      <div class="c-row"><span class="c-lbl">মোবাইল</span><span class="c-sep">:</span><span class="c-val">${rec.mobile}</span></div>
+      <div class="c-row"><span class="c-lbl">রক্তের গ্রুপ</span><span class="c-sep">:</span><span class="c-val"><span class="c-blood-badge">🩸 ${rec.blood}</span></span></div>`;
+  } else {
+    rows=`
+      <div class="c-row"><span class="c-lbl">পদবী</span><span class="c-sep">:</span><span class="c-val">${rec.desg}</span></div>
+      <div class="c-row"><span class="c-lbl">ইনডেক্স</span><span class="c-sep">:</span><span class="c-val">${rec.index}</span></div>
+      <div class="c-row"><span class="c-lbl">বিষয়</span><span class="c-sep">:</span><span class="c-val">${rec.subj}</span></div>
+      <div class="c-row"><span class="c-lbl">যোগদান</span><span class="c-sep">:</span><span class="c-val">${rec.joining}</span></div>
+      <div class="c-row"><span class="c-lbl">মেয়াদ উত্তীর্ণ</span><span class="c-sep">:</span><span class="c-val">${rec.expiry}</span></div>
+      <div class="c-row"><span class="c-lbl">মোবাইল</span><span class="c-sep">:</span><span class="c-val">${rec.mobile}</span></div>
+      <div class="c-row"><span class="c-lbl">রক্তের গ্রুপ</span><span class="c-sep">:</span><span class="c-val"><span class="c-blood-badge">🩸 ${rec.blood}</span></span></div>`;
+  }
+
+  const frontHTML=`
+  <div class="id-card ${tpfx}-card">
+    <div class="card-top">
+      <div class="c-logo">🏫</div>
+      <div class="c-school-info">
+        <span class="c-school-name">${SCHOOL.name}</span>
+        <span class="c-school-addr">${SCHOOL.addr} | স্থাপিত: ${SCHOOL.est}</span>
+      </div>
+      <div class="c-type-pill">${badge}</div>
+    </div>
+    <div class="c-photo-wrap">
+      <div class="c-photo">${photoEl}</div>
+    </div>
+    <div class="c-name-banner">${rec.name}</div>
+    <div class="c-details">${rows}</div>
+    <div class="c-footer">
+      <span class="c-footer-label">Official ID Card</span>
+      <div class="c-sig-area">
+        <div class="c-sig-line"></div>
+        <div class="c-sig-label">প্রতিষ্ঠান প্রধানের স্বাক্ষর</div>
+      </div>
+    </div>
+  </div>`;
+
+  const backHTML=`
+  <div class="id-card id-card-back ${tpfx}-back">
+    <div class="cb-header">
+      <div class="cb-header-title">
+        <div class="cb-header-logo">🏫</div>
+        যোগাযোগ
+      </div>
+    </div>
+    <div class="cb-body">
+      <div class="cb-info">
+        <div class="cb-info-row"><span class="cb-icon">🏫</span><span class="cb-txt">${SCHOOL.name}</span></div>
+        <div class="cb-info-row"><span class="cb-icon">📍</span><span class="cb-txt">${SCHOOL.addr}</span></div>
+        <div class="cb-info-row"><span class="cb-icon">📞</span><span class="cb-txt">${SCHOOL.phone}</span></div>
+        <div class="cb-info-row"><span class="cb-icon">📱</span><span class="cb-txt">প্রধান: ${SCHOOL.principal}</span></div>
+        <div class="cb-info-row"><span class="cb-icon">🌐</span><span class="cb-txt">${SCHOOL.web}</span></div>
+      </div>
+      <div class="cb-divider"></div>
+      <div class="cb-qr-wrap">
+        <div class="cb-qr-frame"><div id="${qid}" style="width:96px;height:96px;"></div></div>
+        <div class="cb-qr-label">Scan QR Code</div>
+      </div>
+      <div class="cb-warning">
+        <span class="cw-icon">⚠</span>
+        <span class="cw-txt">এই কার্ডটি প্রতিষ্ঠানের সম্পত্তি। হারিয়ে গেলে অবিলম্বে স্কুল কর্তৃপক্ষকে জানানো আবশ্যক।</span>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('cardsOut').innerHTML=`
+    <div class="card-wrap" id="cWrap" onclick="toggleFlip()">
+      <div class="card-inner" id="cInner">
+        <div class="card-face front">${frontHTML}</div>
+        <div class="card-face back">${backHTML}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('outSec').classList.add('show');
+
+  setTimeout(()=>{
+    const txt = rec.type==='student'
+      ? `Name:${rec.name}\nClass:${rec.cls}\nRoll:${rec.roll}\nYear:${rec.year}\nType:Student`
+      : `Name:${rec.name}\nIndex:${rec.index}\nDesg:${rec.desg}\nType:${rec.type}\nMobile:${rec.mobile}`;
+    const el=document.getElementById(qid);
+    if(el){ el.innerHTML=''; new QRCode(el,{text:txt,width:96,height:96,correctLevel:QRCode.CorrectLevel.M}); }
+  },120);
+}
+
+/* ══════════════════ FLIP ══════════════════ */
+function toggleFlip(){
+  isFlipped=!isFlipped;
+  document.getElementById('cWrap').classList.toggle('flipped',isFlipped);
+}
+function flipCard(){ toggleFlip(); }
+
+/* ══════════════════ PDF ══════════════════ */
+async function dlPDF(){
+  if(!currentRec){alert('প্রথমে একটি রেকর্ড খুঁজুন।');return;}
+  const btn=document.getElementById('pdfBtn');
+  btn.textContent='⏳ তৈরি হচ্ছে...'; btn.disabled=true;
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const wasFlip=isFlipped;
+
+    // draw front
+    if(wasFlip){document.getElementById('cWrap').classList.remove('flipped');await sleep(500);}
+    const frontEl=document.querySelector('#cWrap .front .id-card');
+    const fc=await html2canvas(frontEl,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
+    const fw=85.6, fh=54*(fc.height/fc.width)*(fw/54);
+    pdf.addImage(fc.toDataURL('image/png'),'PNG',(210-fw)/2,30,fw,fc.height*fw/fc.width);
+
+    // draw back
+    pdf.addPage();
+    document.getElementById('cWrap').classList.add('flipped');
+    await sleep(500);
+    const backEl=document.querySelector('#cWrap .back .id-card-back');
+    const bc=await html2canvas(backEl,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
+    pdf.addImage(bc.toDataURL('image/png'),'PNG',(210-fw)/2,30,fw,bc.height*fw/bc.width);
+
+    if(!wasFlip){document.getElementById('cWrap').classList.remove('flipped');isFlipped=false;}
+    else{isFlipped=true;}
+
+    pdf.save(`ID_${currentRec.name.replace(/\s+/g,'_')}.pdf`);
+  }catch(e){console.error(e);alert('PDF তৈরিতে সমস্যা হয়েছে।');}
+  btn.textContent='⬇ PDF ডাউনলোড'; btn.disabled=false;
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+/* ══════════════════ AUTO LOAD ══════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{ renderCard(TEACHERS[0]); });
+</script>
 </body>
 </html>
