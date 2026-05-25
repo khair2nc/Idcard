@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Verification</title>
+
+<style>
+
+body{
+  font-family:sans-serif;
+  background:#0f172a;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+}
+
+.box{
+  background:#111827;
+  padding:30px;
+  border-radius:16px;
+  width:320px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.ok{
+  color:#22c55e;
+  font-size:26px;
+  font-weight:bold;
+}
+
+.bad{
+  color:#ef4444;
+  font-size:26px;
+  font-weight:bold;
+}
+
+.info{
+  margin-top:20px;
+  text-align:left;
+  line-height:1.8;
+}
+
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<div id="status"></div>
+
+<div class="info" id="info"></div>
+
+</div>
+
+<script>
+
+const teachers = [
+  {
+    name:"রেবা পারভীন",
+    index:"১০৫২০৪০",
+    desg:"সহকারী শিক্ষক"
+  },
+  {
+    name:"মোঃ আরিফুল ইসলাম",
+    index:"১০৩৪৫৬০",
+    desg:"সিনিয়র শিক্ষক"
+  }
+];
+
+const url = new URLSearchParams(window.location.search);
+
+const id = url.get('id');
+
+const found = teachers.find(t => t.index === id);
+
+if(found){
+
+  document.getElementById('status').innerHTML =
+    `<div class="ok">✅ VERIFIED</div>`;
+
+  document.getElementById('info').innerHTML = `
+    <b>নাম:</b> ${found.name}<br>
+    <b>পদবী:</b> ${found.desg}<br>
+    <b>ইনডেক্স:</b> ${found.index}
+  `;
+
+}else{
+
+  document.getElementById('status').innerHTML =
+    `<div class="bad">❌ INVALID ID</div>`;
+
+}
+
+</script>
+
+</body>
+</html>
