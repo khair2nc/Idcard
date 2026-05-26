@@ -759,8 +759,25 @@ function renderCard(rec){
       <div class="c-photo">${photoEl}</div>
     </div>
     <div class="c-name-banner">${rec.name}</div>
-    <div class="c-details">${rows}</div>
-    <div class="c-footer">
+<div class="c-details" style="position:relative; overflow:hidden;">
+
+  <!-- WATERMARK LOGO -->
+  <div style="
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(-25deg);
+    opacity:0.07;
+    pointer-events:none;
+    z-index:0;
+  ">
+    <img src="Photos/LOGO2.png" style="width:180px;height:auto;">
+  </div>
+
+  ${rows}
+
+</div>
+<div class="c-footer">
       <span class="c-footer-label">Official ID Card</span>
       <div class="c-sig-area">
         <div class="c-sig-line"></div>
