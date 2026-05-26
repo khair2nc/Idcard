@@ -917,26 +917,38 @@ async function dlPDF(){
   btn.textContent='⏳ তৈরি হচ্ছে...'; btn.disabled=true;
   try{
     const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    // A4 landscape: 297mm × 210mm
+    const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+    const pageW=297, pageH=210;
+
+    const cardW=54;        // 54mm চওড়া
+    const cardH=85.6;      // 85.6mm লম্বা
+    const gap=2;           // 2mm ফাঁকা
+
     const wasFlip=isFlipped;
 
-    // draw front
+    // ── Capture FRONT ──
     if(wasFlip){document.getElementById('cWrap').classList.remove('flipped');await sleep(500);}
     const frontEl=document.querySelector('#cWrap .front .id-card');
-    const fc=await html2canvas(frontEl,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
-    const fw=85.6, fh=54*(fc.height/fc.width)*(fw/54);
-    pdf.addImage(fc.toDataURL('image/png'),'PNG',(210-fw)/2,30,fw,fc.height*fw/fc.width);
+    const fc=await html2canvas(frontEl,{scale:4,useCORS:true,backgroundColor:'#ffffff'});
 
-    // draw back
-    pdf.addPage();
+    // ── Capture BACK ──
     document.getElementById('cWrap').classList.add('flipped');
     await sleep(500);
     const backEl=document.querySelector('#cWrap .back .id-card-back');
-    const bc=await html2canvas(backEl,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
-    pdf.addImage(bc.toDataURL('image/png'),'PNG',(210-fw)/2,30,fw,bc.height*fw/bc.width);
+    const bc=await html2canvas(backEl,{scale:4,useCORS:true,backgroundColor:'#ffffff'});
 
+    // Restore flip state
     if(!wasFlip){document.getElementById('cWrap').classList.remove('flipped');isFlipped=false;}
     else{isFlipped=true;}
+
+    // ── Layout: দুই কার্ড পাশাপাশি, পেজের মাঝে ──
+    const totalW = cardW*2 + gap;
+    const startX  = (pageW - totalW) / 2;
+    const startY  = (pageH - cardH) / 2;
+
+    pdf.addImage(fc.toDataURL('image/png'),'PNG', startX,            startY, cardW, cardH);
+    pdf.addImage(bc.toDataURL('image/png'),'PNG', startX+cardW+gap,  startY, cardW, cardH);
 
     pdf.save(`ID_${currentRec.name.replace(/\s+/g,'_')}.pdf`);
   }catch(e){console.error(e);alert('PDF তৈরিতে সমস্যা হয়েছে।');}
