@@ -650,6 +650,7 @@ document.getElementById("mainContent").style.display = "block";
 document.getElementById("logoutBtn").style.display = "block";
 
 localStorage.setItem("loggedIn","yes");
+resetTimer();
 
 }else{
 
@@ -1068,6 +1069,28 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 /* ══════════════════ AUTO LOAD ══════════════════ */
 document.addEventListener('DOMContentLoaded',()=>{ renderCard(TEACHERS[0]); });
+let logoutTimer;
+
+const AUTO_LOGOUT_TIME = 5 * 60 * 1000;
+
+function resetTimer() {
+  clearTimeout(logoutTimer);
+
+  logoutTimer = setTimeout(() => {
+    autoLogout();
+  }, AUTO_LOGOUT_TIME);
+}
+
+function autoLogout() {
+  alert("ইনঅ্যাক্টিভ থাকার কারণে আপনাকে লগআউট করা হয়েছে।");
+  localStorage.removeItem("loggedIn");
+  location.reload();
+}
+
+document.addEventListener("mousemove", resetTimer);
+document.addEventListener("keypress", resetTimer);
+document.addEventListener("click", resetTimer);
+document.addEventListener("scroll", resetTimer);
 </script>
 
 </div>
