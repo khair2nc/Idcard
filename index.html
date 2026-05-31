@@ -466,6 +466,41 @@ body::after {
 </head>
 <body>
 
+<div id="loginPage" style="
+max-width:400px;
+margin:100px auto;
+padding:30px;
+background:#1a1f2b;
+border-radius:15px;
+text-align:center;
+">
+
+<h2 style="margin-bottom:20px;">লগইন করুন</h2>
+
+<input
+type="text"
+id="mobile"
+placeholder="মোবাইল নম্বর"
+style="width:100%;padding:12px;margin-bottom:10px;">
+
+<input
+type="password"
+id="password"
+placeholder="পাসওয়ার্ড"
+style="width:100%;padding:12px;margin-bottom:15px;">
+
+<button
+onclick="login()"
+style="width:100%;padding:12px;">
+লগইন
+</button>
+
+<p id="error" style="color:red;margin-top:10px;"></p>
+
+</div>
+
+<div id="mainContent" style="display:none;">
+
 <!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
@@ -478,8 +513,27 @@ body::after {
         <span class="sa">বোয়ালমারী, ফরিদপুর · প্রতিষ্ঠাকাল ১৯৯৪</span>
       </div>
     </div>
-    <div class="hbadge">ID Card System</div>
-  </div>
+<div style="display:flex;gap:10px;align-items:center;">
+
+  <div class="hbadge">ID Card System</div>
+
+  <button
+    id="logoutBtn"
+    onclick="logout()"
+    style="
+      display:none;
+      padding:8px 12px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      background:#dc3545;
+      color:white;
+      font-weight:600;
+    ">
+    Logout
+  </button>
+
+</div>  </div>
 </header>
 
 <div class="wrap">
@@ -567,6 +621,62 @@ body::after {
 </div><!-- /wrap -->
 
 <script>
+
+const users = [
+{
+mobile:"01711111111",
+password:"123456"
+},
+{
+mobile:"01888888888",
+password:"adminx"
+}
+];
+
+function login(){
+
+const mobile = document.getElementById("mobile").value;
+const password = document.getElementById("password").value;
+
+const user = users.find(
+u => u.mobile === mobile &&
+u.password === password
+);
+
+if(user){
+
+document.getElementById("loginPage").style.display = "none";
+document.getElementById("mainContent").style.display = "block";
+document.getElementById("logoutBtn").style.display = "block";
+
+localStorage.setItem("loggedIn","yes");
+
+}else{
+
+document.getElementById("error").innerText =
+"মোবাইল নম্বর বা পাসওয়ার্ড ভুল";
+
+}
+
+}
+
+function logout(){
+
+localStorage.removeItem("loggedIn");
+location.reload();
+
+}
+
+window.onload = function () {
+  if (localStorage.getItem("loggedIn") === "yes") {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("logoutBtn").style.display = "block";
+  } else {
+    document.getElementById("loginPage").style.display = "block";
+    document.getElementById("mainContent").style.display = "none";
+  }
+}
 /* ══════════════════ DATA ══════════════════ */
 const SCHOOL = {
   name: "নদেরচাঁদ প্রেমচাঁদ দাস একাডেমি",
@@ -959,5 +1069,8 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 /* ══════════════════ AUTO LOAD ══════════════════ */
 document.addEventListener('DOMContentLoaded',()=>{ renderCard(TEACHERS[0]); });
 </script>
+
+</div>
+
 </body>
 </html>
